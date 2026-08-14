@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Flex TopUp - Safe · Fast · Reliable </title>
+<title>Flex TopUp - Safe · Fast · Reliable</title>
 <link id="favicon" rel="icon" href="https://cdn-icons-png.flaticon.com/512/686/686589.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
@@ -223,7 +223,7 @@ footer{background:var(--bg2); border-top:1px solid var(--border); padding:60px 2
     <div class="logo-wrap">
       <img id="logoImg" src="" alt="logo" style="display:none;">
       <div id="logoFallback"><i class="fa-solid fa-gamepad"></i></div>
-      <span class="site-name">GameVault</span>
+      <span class="site-name">Flex TopUp</span>
     </div>
     <ul class="nav-links" id="navLinks">
       <li><a href="#home">Home</a></li>
@@ -254,7 +254,7 @@ footer{background:var(--bg2); border-top:1px solid var(--border); padding:60px 2
   <div class="hero-shapes"><div class="shape shape1"></div><div class="shape shape2"></div><div class="shape shape3"></div></div>
   <div class="hero-content">
     <span class="tag-pill" id="tagline">Trusted Marketplace to Buy Free Fire Diamonds</span>
-    <h1 id="heroTitle">Get Free Fire DIamonds at the Best Price</h1>
+    <h1 id="heroTitle">Get Free Fire Diamonds at the Best Price</h1>
     <p id="heroSubtitle">TopUp and Flex</p>
     <div class="hero-btns">
       <a href="#games" class="btn btn-primary"><i class="fa-solid fa-rocket"></i> Explore Games</a>
@@ -298,7 +298,7 @@ footer{background:var(--bg2); border-top:1px solid var(--border); padding:60px 2
 <footer id="contact">
   <div class="footer-container">
     <div class="footer-brand">
-      <div class="logo-wrap"><span class="site-name">GameVault</span></div>
+      <div class="logo-wrap"><span class="site-name">Flex TopUp</span></div>
       <p>Premium marketplace for game items, top-ups and packages, trusted by thousands of gamers worldwide.</p>
       <div class="social-icons">
         <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
@@ -316,7 +316,7 @@ footer{background:var(--bg2); border-top:1px solid var(--border); padding:60px 2
       <ul><li><a href="#">Help Center</a></li><li><a href="#">Terms of Service</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Refund Policy</a></li></ul>
     </div>
   </div>
-  <div class="footer-bottom" id="footerText">© 2024 GameVault. All rights reserved.</div>
+  <div class="footer-bottom" id="footerText">© 2024 Flex TopUp. All rights reserved.</div>
 </footer>
 
 <button id="backToTop"><i class="fa-solid fa-arrow-up"></i></button>
@@ -333,11 +333,11 @@ footer{background:var(--bg2); border-top:1px solid var(--border); padding:60px 2
     <form id="orderForm">
       <div class="form-group">
         <label for="orderName">Your UID</label>
-        <input type="text" id="orderName" required>
+        <input type="text" id="orderName" placeholder="Enter your game UID" required>
       </div>
       <div class="form-group">
         <label for="orderContact">Email / Phone</label>
-        <input type="text" id="orderContact" required>
+        <input type="text" id="orderContact" placeholder="Enter your email or phone" required>
       </div>
       <div class="form-group">
         <label for="orderQty">Quantity</label>
@@ -345,7 +345,7 @@ footer{background:var(--bg2); border-top:1px solid var(--border); padding:60px 2
       </div>
       <div class="form-group">
         <label for="transactionId">TRANSACTION ID</label>
-        <input type="text" id="transactionId" required>
+        <input type="text" id="transactionId" placeholder="Enter your transaction ID" required>
       </div>
       <p style="color:var(--secondary);font-weight:600;text-align:center;margin:10px 0;">
         <i class="fa-solid fa-mobile-screen-button"></i> Our Bkash, Nagad Number: 01770206757
@@ -356,13 +356,14 @@ footer{background:var(--bg2); border-top:1px solid var(--border); padding:60px 2
     </form>
   </div>
 </div>
+
 <!-- Login Modal -->
 <div class="modal" id="loginModal">
   <div class="modal-box">
     <button class="modal-close" onclick="document.getElementById('loginModal').classList.remove('active')"><i class="fa-solid fa-xmark"></i></button>
     <div style="text-align:center;">
       <div style="width:60px;height:60px;border-radius:16px;margin:0 auto 18px;background:linear-gradient(135deg,var(--primary),var(--secondary));display:flex;align-items:center;justify-content:center;font-size:1.6rem;color:#fff;"><i class="fa-solid fa-user"></i></div>
-      <h3>Welcome to GameVault</h3>
+      <h3>Welcome to Flex TopUp</h3>
       <p style="color:var(--text2); font-size:.9rem; margin:10px 0 24px;">Login to track your orders and spending history</p>
       <button class="btn btn-google btn-full" id="googleLoginBtn"><i class="fa-brands fa-google"></i> Continue with Google</button>
     </div>
@@ -396,6 +397,9 @@ footer{background:var(--bg2); border-top:1px solid var(--border); padding:60px 2
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <script>
+// ============================================================
+// FIREBASE CONFIGURATION
+// ============================================================
 const firebaseConfig = {
   apiKey: "AIzaSyBLq1SlpeLAVJfcPwFLTpBE7BqqLOhiWXs",
   authDomain: "diamond-expert.firebaseapp.com",
@@ -411,91 +415,147 @@ const db = firebase.firestore();
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 let currentUser = null;
 
-/* Preloader */
-window.addEventListener('load', ()=> document.getElementById('preloader').classList.add('hide'));
+// ============================================================
+// PRELOADER
+// ============================================================
+window.addEventListener('load', () => {
+  document.getElementById('preloader').classList.add('hide');
+});
 
-/* Theme */
+// ============================================================
+// THEME TOGGLE
+// ============================================================
 const root = document.documentElement;
 const savedTheme = localStorage.getItem('theme') || 'dark';
 root.setAttribute('data-theme', savedTheme);
+
+function updateThemeIcon(theme) {
+  document.getElementById('themeIcon').className = theme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+}
 updateThemeIcon(savedTheme);
-function updateThemeIcon(theme){ document.getElementById('themeIcon').className = theme==='dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon'; }
-document.getElementById('themeToggle').addEventListener('click', ()=>{
-  const next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
-  root.setAttribute('data-theme', next); localStorage.setItem('theme', next); updateThemeIcon(next);
+
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  root.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+  updateThemeIcon(next);
 });
 
-/* Mobile nav */
+// ============================================================
+// MOBILE NAV
+// ============================================================
 const hamburger = document.getElementById('hamburger');
 const navLinks = document.getElementById('navLinks');
-hamburger.addEventListener('click', ()=>{ navLinks.classList.toggle('active'); hamburger.classList.toggle('active'); });
-document.querySelectorAll('.nav-links a').forEach(a=> a.addEventListener('click', ()=>{ navLinks.classList.remove('active'); hamburger.classList.remove('active'); }));
 
-/* Navbar scroll */
-window.addEventListener('scroll', ()=>{
+hamburger.addEventListener('click', () => {
+  navLinks.classList.toggle('active');
+  hamburger.classList.toggle('active');
+});
+
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => {
+    navLinks.classList.remove('active');
+    hamburger.classList.remove('active');
+  });
+});
+
+// ============================================================
+// NAVBAR SCROLL & BACK TO TOP
+// ============================================================
+window.addEventListener('scroll', () => {
   document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
   document.getElementById('backToTop').classList.toggle('show', window.scrollY > 400);
 });
-document.getElementById('backToTop').addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
 
-/* Reveal */
-function observeReveal(){
+document.getElementById('backToTop').addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// ============================================================
+// REVEAL ANIMATIONS
+// ============================================================
+function observeReveal() {
   const els = document.querySelectorAll('.reveal:not(.visible)');
-  const obs = new IntersectionObserver(entries=>{
-    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
-  }, {threshold:0.12});
-  els.forEach(el=> obs.observe(el));
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  els.forEach(el => obs.observe(el));
 }
 observeReveal();
 
-/* Toast */
-function showToast(msg, type='info'){
+// ============================================================
+// TOAST NOTIFICATIONS
+// ============================================================
+function showToast(msg, type = 'info') {
   const container = document.getElementById('toastContainer');
   const toast = document.createElement('div');
   toast.className = `toast toast-${type}`;
-  toast.innerHTML = `<i class="fa-solid ${type==='success'?'fa-circle-check':type==='error'?'fa-circle-xmark':'fa-circle-info'}"></i> ${msg}`;
+  const icon = type === 'success' ? 'fa-circle-check' : type === 'error' ? 'fa-circle-xmark' : 'fa-circle-info';
+  toast.innerHTML = `<i class="fa-solid ${icon}"></i> ${msg}`;
   container.appendChild(toast);
-  setTimeout(()=> toast.classList.add('show'), 10);
-  setTimeout(()=>{ toast.classList.remove('show'); setTimeout(()=> toast.remove(), 300); }, 3500);
+  setTimeout(() => toast.classList.add('show'), 10);
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 300);
+  }, 3500);
 }
 
-/* ---------- CUSTOMER AUTH ---------- */
-document.getElementById('loginNavBtn').addEventListener('click', ()=> document.getElementById('loginModal').classList.add('active'));
-document.getElementById('googleLoginBtn').addEventListener('click', async ()=>{
-  try{
+// ============================================================
+// AUTHENTICATION
+// ============================================================
+document.getElementById('loginNavBtn').addEventListener('click', () => {
+  document.getElementById('loginModal').classList.add('active');
+});
+
+document.getElementById('googleLoginBtn').addEventListener('click', async () => {
+  try {
     await auth.signInWithPopup(googleProvider);
     document.getElementById('loginModal').classList.remove('active');
     showToast('Logged in successfully!', 'success');
-  }catch(err){ showToast('Login failed. Try again.', 'error'); console.error(err); }
+  } catch (err) {
+    showToast('Login failed. Try again.', 'error');
+    console.error(err);
+  }
 });
-document.getElementById('logoutBtn').addEventListener('click', ()=>{ auth.signOut(); document.getElementById('userDropdown').classList.remove('open'); });
+
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  auth.signOut();
+  document.getElementById('userDropdown').classList.remove('open');
+});
 
 const userAvatarBtn = document.getElementById('userAvatarBtn');
 const userDropdown = document.getElementById('userDropdown');
-userAvatarBtn.addEventListener('click', ()=> userDropdown.classList.toggle('open'));
-document.addEventListener('click', e=>{ if(!e.target.closest('.user-menu')) userDropdown.classList.remove('open'); });
 
-auth.onAuthStateChanged(async user=>{
+userAvatarBtn.addEventListener('click', () => userDropdown.classList.toggle('open'));
+document.addEventListener('click', e => {
+  if (!e.target.closest('.user-menu')) userDropdown.classList.remove('open');
+});
+
+auth.onAuthStateChanged(async user => {
   currentUser = user;
-  if(user){
+  if (user) {
     document.getElementById('loginNavBtn').style.display = 'none';
     document.getElementById('userMenu').style.display = 'block';
     const initial = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
     document.getElementById('avatarInitial').textContent = initial;
     document.getElementById('ddName').textContent = user.displayName || 'User';
     document.getElementById('ddEmail').textContent = user.email || '';
-    if(user.photoURL){
+    if (user.photoURL) {
       document.getElementById('avatarImg').src = user.photoURL;
-      document.getElementById('avatarImg').style.display='block';
-      document.getElementById('avatarInitial').style.display='none';
+      document.getElementById('avatarImg').style.display = 'block';
+      document.getElementById('avatarInitial').style.display = 'none';
     } else {
-      document.getElementById('avatarImg').style.display='none';
-      document.getElementById('avatarInitial').style.display='block';
+      document.getElementById('avatarImg').style.display = 'none';
+      document.getElementById('avatarInitial').style.display = 'block';
     }
-    // Upsert user profile doc
     const userRef = db.collection('users').doc(user.uid);
     const snap = await userRef.get();
-    if(!snap.exists){
+    if (!snap.exists) {
       await userRef.set({
         name: user.displayName || '',
         email: user.email || '',
@@ -504,7 +564,11 @@ auth.onAuthStateChanged(async user=>{
         lastLogin: firebase.firestore.FieldValue.serverTimestamp()
       });
     } else {
-      await userRef.update({ lastLogin: firebase.firestore.FieldValue.serverTimestamp(), name: user.displayName||'', photoURL: user.photoURL||'' });
+      await userRef.update({
+        lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+        name: user.displayName || '',
+        photoURL: user.photoURL || ''
+      });
     }
   } else {
     document.getElementById('loginNavBtn').style.display = 'flex';
@@ -512,197 +576,305 @@ auth.onAuthStateChanged(async user=>{
   }
 });
 
-/* Profile modal */
-document.getElementById('openProfileBtn').addEventListener('click', async ()=>{
+// ============================================================
+// PROFILE MODAL
+// ============================================================
+document.getElementById('openProfileBtn').addEventListener('click', async () => {
   userDropdown.classList.remove('open');
-  if(!currentUser) return;
+  if (!currentUser) return;
   document.getElementById('profileModal').classList.add('active');
   const initial = (currentUser.displayName || currentUser.email || 'U').charAt(0).toUpperCase();
   document.getElementById('profileName').textContent = currentUser.displayName || 'User';
   document.getElementById('profileEmail').textContent = currentUser.email || '';
   document.getElementById('profileInitial').textContent = initial;
-  if(currentUser.photoURL){
+  if (currentUser.photoURL) {
     document.getElementById('profileImg').src = currentUser.photoURL;
-    document.getElementById('profileImg').style.display='block';
-    document.getElementById('profileInitial').style.display='none';
+    document.getElementById('profileImg').style.display = 'block';
+    document.getElementById('profileInitial').style.display = 'none';
   } else {
-    document.getElementById('profileImg').style.display='none';
-    document.getElementById('profileInitial').style.display='block';
+    document.getElementById('profileImg').style.display = 'none';
+    document.getElementById('profileInitial').style.display = 'block';
   }
-  try{
+  try {
     const userDoc = await db.collection('users').doc(currentUser.uid).get();
-    if(userDoc.exists && userDoc.data().createdAt){
+    if (userDoc.exists && userDoc.data().createdAt) {
       const d = userDoc.data().createdAt.toDate();
       document.getElementById('profileJoined').textContent = 'Member since ' + (d ? d.toLocaleDateString() : 'N/A');
     }
-  }catch(e){}
+  } catch (e) {}
 
-  try{
-    const ordersSnap = await db.collection('orders').where('uid','==', currentUser.uid).get();
-    let orders = []; ordersSnap.forEach(d=> orders.push({id:d.id, ...d.data()}));
-    orders.sort((a,b)=>{
+  try {
+    const ordersSnap = await db.collection('orders').where('uid', '==', currentUser.uid).get();
+    let orders = [];
+    ordersSnap.forEach(d => orders.push({ id: d.id, ...d.data() }));
+    orders.sort((a, b) => {
       const ta = a.createdAt && a.createdAt.toDate ? a.createdAt.toDate().getTime() : 0;
       const tb = b.createdAt && b.createdAt.toDate ? b.createdAt.toDate().getTime() : 0;
       return tb - ta;
     });
-    const totalSpent = orders.filter(o=> o.status !== 'cancelled').reduce((sum,o)=> sum + (Number(o.price)||0) * (Number(o.quantity)||1), 0);
+    const totalSpent = orders.filter(o => o.status !== 'cancelled').reduce((sum, o) => sum + (Number(o.price) || 0) * (Number(o.quantity) || 1), 0);
     document.getElementById('profileTotalSpent').textContent = '৳' + totalSpent.toFixed(2);
     document.getElementById('profileTotalOrders').textContent = orders.length;
     const list = document.getElementById('profileOrdersList');
-    if(orders.length === 0){ list.innerHTML = '<p class="empty-msg">No orders yet.</p>'; }
-    else{
-      list.innerHTML = orders.map(o=>{
+    if (orders.length === 0) {
+      list.innerHTML = '<p class="empty-msg">No orders yet.</p>';
+    } else {
+      list.innerHTML = orders.map(o => {
         const date = o.createdAt && o.createdAt.toDate ? o.createdAt.toDate().toLocaleDateString() : '-';
-        const total = ((Number(o.price)||0) * (Number(o.quantity)||1)).toFixed(2);
+        const total = ((Number(o.price) || 0) * (Number(o.quantity) || 1)).toFixed(2);
         return `<div class="porder-item">
-          <div class="porder-info"><strong>${o.packageTitle||'-'}</strong><small>${o.gameName||''} • Qty: ${o.quantity||1} • ${date}</small></div>
+          <div class="porder-info"><strong>${o.packageTitle || '-'}</strong><small>${o.gameName || ''} • Qty: ${o.quantity || 1} • ${date}</small></div>
           <div style="text-align:right;">
             <div style="font-weight:700;color:var(--secondary);">৳${total}</div>
-            <span class="status-badge status-${o.status||'pending'}">${o.status||'pending'}</span>
+            <span class="status-badge status-${o.status || 'pending'}">${o.status || 'pending'}</span>
           </div>
         </div>`;
       }).join('');
     }
-  }catch(err){ console.error(err); }
+  } catch (err) {
+    console.error(err);
+  }
 });
 
-/* Config listener */
-db.collection('config').doc('site').onSnapshot(doc=>{
+// ============================================================
+// CONFIG LISTENER
+// ============================================================
+db.collection('config').doc('site').onSnapshot(doc => {
   const data = doc.exists ? doc.data() : {};
-  const siteName = data.siteName || 'GameVault';
+  const siteName = data.siteName || 'Flex TopUp';
   document.title = siteName + ' - Premium Game Items';
-  document.querySelectorAll('.site-name').forEach(el=> el.textContent = siteName);
+  document.querySelectorAll('.site-name').forEach(el => el.textContent = siteName);
   document.getElementById('footerText').textContent = `© ${new Date().getFullYear()} ${siteName}. All rights reserved.`;
   const logoImg = document.getElementById('logoImg');
   const logoFallback = document.getElementById('logoFallback');
-  if(data.logoUrl){
-    logoImg.src = data.logoUrl; logoImg.style.display='block'; logoFallback.style.display='none';
+  if (data.logoUrl) {
+    logoImg.src = data.logoUrl;
+    logoImg.style.display = 'block';
+    logoFallback.style.display = 'none';
     document.getElementById('favicon').href = data.logoUrl;
-  } else { logoImg.style.display='none'; logoFallback.style.display='flex'; }
-  document.getElementById('heroTitle').textContent = data.heroTitle || 'Level Up Your Game';
-  document.getElementById('heroSubtitle').textContent = data.heroSubtitle || 'Premium in-game items, top-ups & packages delivered instantly.';
-  document.getElementById('tagline').textContent = data.tagline || 'Your trusted marketplace for gamers';
-}, err=> console.error(err));
+  } else {
+    logoImg.style.display = 'none';
+    logoFallback.style.display = 'flex';
+  }
+  document.getElementById('heroTitle').textContent = data.heroTitle || 'Get Free Fire Diamonds at the Best Price';
+  document.getElementById('heroSubtitle').textContent = data.heroSubtitle || 'TopUp and Flex';
+  document.getElementById('tagline').textContent = data.tagline || 'Trusted Marketplace to Buy Free Fire Diamonds';
+}, err => console.error(err));
 
-/* Games */
+// ============================================================
+// GAMES
+// ============================================================
 let gamesCache = [];
 const gamesGrid = document.getElementById('gamesGrid');
 const filterChips = document.getElementById('filterChips');
 
-db.collection('games').orderBy('order','asc').onSnapshot(snap=>{
-  gamesCache = []; snap.forEach(d=> gamesCache.push({id:d.id, ...d.data()}));
-  renderGames(); renderFilterChips();
-}, err=>{ gamesGrid.innerHTML = '<p class="empty-msg">Unable to load games.</p>'; });
+db.collection('games').orderBy('order', 'asc').onSnapshot(snap => {
+  gamesCache = [];
+  snap.forEach(d => gamesCache.push({ id: d.id, ...d.data() }));
+  renderGames();
+  renderFilterChips();
+}, err => {
+  gamesGrid.innerHTML = '<p class="empty-msg">Unable to load games.</p>';
+});
 
-function renderGames(){
-  const active = gamesCache.filter(g=> g.active !== false);
-  if(active.length===0){ gamesGrid.innerHTML = '<p class="empty-msg">No games available yet. Check back soon!</p>'; return; }
-  gamesGrid.innerHTML = active.map((g,i)=>`
-    <div class="game-card reveal" style="transition-delay:${i*0.07}s">
-      <div class="game-img-wrap"><img src="${g.image||'https://via.placeholder.com/400x500?text=Game'}" alt="${g.name}" loading="lazy"><div class="game-overlay"></div></div>
+function renderGames() {
+  const active = gamesCache.filter(g => g.active !== false);
+  if (active.length === 0) {
+    gamesGrid.innerHTML = '<p class="empty-msg">No games available yet. Check back soon!</p>';
+    return;
+  }
+  gamesGrid.innerHTML = active.map((g, i) => `
+    <div class="game-card reveal" style="transition-delay:${i * 0.07}s">
+      <div class="game-img-wrap"><img src="${g.image || 'https://via.placeholder.com/400x500?text=Game'}" alt="${g.name}" loading="lazy"><div class="game-overlay"></div></div>
       <div class="game-info">
-        <span class="game-genre">${g.genre||'Game'}</span>
+        <span class="game-genre">${g.genre || 'Game'}</span>
         <h3>${g.name}</h3>
         <button class="btn btn-outline btn-sm" onclick="filterByGame('${g.id}')"><i class="fa-solid fa-boxes-stacked"></i> View Packages</button>
       </div>
-    </div>`).join('');
+    </div>
+  `).join('');
   observeReveal();
 }
 
-function renderFilterChips(){
-  const active = gamesCache.filter(g=> g.active !== false);
+function renderFilterChips() {
+  const active = gamesCache.filter(g => g.active !== false);
   filterChips.innerHTML = `<button class="chip active" data-id="all">All Games</button>` +
-    active.map(g=>`<button class="chip" data-id="${g.id}">${g.name}</button>`).join('');
-  filterChips.querySelectorAll('.chip').forEach(chip=>{
-    chip.addEventListener('click', ()=>{
-      filterChips.querySelectorAll('.chip').forEach(c=> c.classList.remove('active'));
-      chip.classList.add('active'); renderPackages(chip.dataset.id);
+    active.map(g => `<button class="chip" data-id="${g.id}">${g.name}</button>`).join('');
+  filterChips.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      filterChips.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      renderPackages(chip.dataset.id);
     });
   });
 }
 
-function filterByGame(id){
-  document.getElementById('packages').scrollIntoView({behavior:'smooth'});
-  setTimeout(()=>{
-    filterChips.querySelectorAll('.chip').forEach(c=> c.classList.toggle('active', c.dataset.id===id));
+function filterByGame(id) {
+  document.getElementById('packages').scrollIntoView({ behavior: 'smooth' });
+  setTimeout(() => {
+    filterChips.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c.dataset.id === id));
     renderPackages(id);
   }, 500);
 }
 
-/* Packages */
-let packagesCache = []; let currentFilter='all';
+// ============================================================
+// PACKAGES
+// ============================================================
+let packagesCache = [];
+let currentFilter = 'all';
 const packagesGrid = document.getElementById('packagesGrid');
 
-db.collection('packages').orderBy('order','asc').onSnapshot(snap=>{
-  packagesCache = []; snap.forEach(d=> packagesCache.push({id:d.id, ...d.data()}));
+db.collection('packages').orderBy('order', 'asc').onSnapshot(snap => {
+  packagesCache = [];
+  snap.forEach(d => packagesCache.push({ id: d.id, ...d.data() }));
   renderPackages(currentFilter);
-}, err=>{ packagesGrid.innerHTML = '<p class="empty-msg">Unable to load packages.</p>'; });
+}, err => {
+  packagesGrid.innerHTML = '<p class="empty-msg">Unable to load packages.</p>';
+});
 
-function renderPackages(filter='all'){
+function renderPackages(filter = 'all') {
   currentFilter = filter;
-  const list = filter==='all' ? packagesCache : packagesCache.filter(p=> p.gameId===filter);
-  if(list.length===0){ packagesGrid.innerHTML = '<p class="empty-msg">No packages available for this selection.</p>'; return; }
-  packagesGrid.innerHTML = list.map((p,i)=>`
-    <div class="package-card reveal" style="transition-delay:${i*0.05}s">
-      ${p.badge ? `<span class="badge-ribbon">${p.badge}</span>`:''}
-      <div class="pkg-img-wrap"><img src="${p.image||'https://via.placeholder.com/300x200?text=Package'}" alt="${p.title}" loading="lazy"></div>
+  const list = filter === 'all' ? packagesCache : packagesCache.filter(p => p.gameId === filter);
+  if (list.length === 0) {
+    packagesGrid.innerHTML = '<p class="empty-msg">No packages available for this selection.</p>';
+    return;
+  }
+  packagesGrid.innerHTML = list.map((p, i) => `
+    <div class="package-card reveal" style="transition-delay:${i * 0.05}s">
+      ${p.badge ? `<span class="badge-ribbon">${p.badge}</span>` : ''}
+      <div class="pkg-img-wrap"><img src="${p.image || 'https://via.placeholder.com/300x200?text=Package'}" alt="${p.title}" loading="lazy"></div>
       <div class="pkg-info">
-        <span class="pkg-game-tag">${p.gameName||''}</span>
+        <span class="pkg-game-tag">${p.gameName || ''}</span>
         <h4>${p.title}</h4>
-        <p class="pkg-desc">${p.description||''}</p>
+        <p class="pkg-desc">${p.description || ''}</p>
         <div class="pkg-price-row">
-          <div>${p.oldPrice?`<span class="old-price">৳${p.oldPrice}</span>`:''}<span class="price">৳${p.price}</span></div>
+          <div>${p.oldPrice ? `<span class="old-price">৳${p.oldPrice}</span>` : ''}<span class="price">৳${p.price}</span></div>
           <button class="btn btn-primary btn-sm buy-btn" data-id="${p.id}"><i class="fa-solid fa-cart-shopping"></i> Buy</button>
         </div>
       </div>
-    </div>`).join('');
+    </div>
+  `).join('');
   observeReveal();
 }
 
-/* Buy button delegation */
+// ============================================================
+// ORDER SYSTEM
+// ============================================================
 let selectedPackage = null;
 const orderModal = document.getElementById('orderModal');
-packagesGrid.addEventListener('click', e=>{
+
+// Buy button handler
+packagesGrid.addEventListener('click', e => {
   const btn = e.target.closest('.buy-btn');
-  if(!btn) return;
-  const pkg = packagesCache.find(p=> p.id === btn.dataset.id);
-  if(!pkg) return;
+  if (!btn) return;
+  const pkg = packagesCache.find(p => p.id === btn.dataset.id);
+  if (!pkg) return;
   selectedPackage = pkg;
   document.getElementById('modalPkgName').textContent = pkg.title;
-  document.getElementById('modalPkgPrice').textContent = '৳'+pkg.price;
+  document.getElementById('modalPkgPrice').textContent = '৳' + pkg.price;
   document.getElementById('modalPkgImg').src = pkg.image || 'https://via.placeholder.com/100';
-  if(currentUser){
+  if (currentUser) {
     document.getElementById('orderName').value = currentUser.displayName || '';
     document.getElementById('orderContact').value = currentUser.email || '';
+  } else {
+    document.getElementById('orderName').value = '';
+    document.getElementById('orderContact').value = '';
   }
+  document.getElementById('orderQty').value = 1;
+  document.getElementById('transactionId').value = '';
   orderModal.classList.add('active');
 });
-orderModal.addEventListener('click', e=>{ if(e.target===orderModal) orderModal.classList.remove('active'); });
 
-document.getElementById('orderForm').addEventListener('submit', async e=>{
+// Close modal on outside click
+orderModal.addEventListener('click', e => {
+  if (e.target === orderModal) {
+    orderModal.classList.remove('active');
+    selectedPackage = null;
+  }
+});
+
+// Order form submission
+document.getElementById('orderForm').addEventListener('submit', async e => {
   e.preventDefault();
+
+  // Get form elements
+  const nameEl = document.getElementById('orderName');
+  const contactEl = document.getElementById('orderContact');
+  const qtyEl = document.getElementById('orderQty');
+  const transactionEl = document.getElementById('transactionId');
+
+  // Validate all elements exist
+  if (!nameEl || !contactEl || !qtyEl || !transactionEl) {
+    showToast('Form error. Please refresh the page.', 'error');
+    return;
+  }
+
+  // Get values
+  const orderName = nameEl.value.trim();
+  const orderContact = contactEl.value.trim();
+  const orderQty = Number(qtyEl.value) || 1;
+  const transactionId = transactionEl.value.trim();
+
+  // Validate required fields
+  if (!orderName) {
+    showToast('Please enter your UID.', 'error');
+    nameEl.focus();
+    return;
+  }
+  if (!orderContact) {
+    showToast('Please enter your email or phone.', 'error');
+    contactEl.focus();
+    return;
+  }
+  if (!transactionId) {
+    showToast('Please enter your TRANSACTION ID.', 'error');
+    transactionEl.focus();
+    return;
+  }
+  if (!selectedPackage) {
+    showToast('Please select a package first.', 'error');
+    return;
+  }
+
   const btn = e.target.querySelector('button[type="submit"]');
-  btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Placing...';
-  try{
-    await db.collection('orders').add({
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Placing...';
+
+  try {
+    const orderData = {
       uid: currentUser ? currentUser.uid : null,
+      userEmail: currentUser ? currentUser.email : '',
+      userName: currentUser ? currentUser.displayName : '',
       packageId: selectedPackage.id,
       packageTitle: selectedPackage.title,
       gameName: selectedPackage.gameName || '',
-      price: selectedPackage.price,
-      quantity: Number(document.getElementById('orderQty').value)||1,
-      name: document.getElementById('orderName').value,
-      contact: document.getElementById('orderContact').value,
-      transactionId: document.getElementById('transactionId').value,
-      note: document.getElementById('orderNote').value,
+      price: Number(selectedPackage.price) || 0,
+      quantity: orderQty,
+      totalPrice: (Number(selectedPackage.price) || 0) * orderQty,
+      name: orderName,
+      contact: orderContact,
+      transactionId: transactionId,
       status: 'pending',
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-    showToast('Order placed successfully! We will contact you soon.', 'success');
+    };
+
+    console.log('📦 Submitting order:', orderData);
+
+    const docRef = await db.collection('orders').add(orderData);
+    console.log('✅ Order placed! ID:', docRef.id);
+
+    showToast('✅ Order placed successfully! We will contact you soon.', 'success');
     e.target.reset();
     orderModal.classList.remove('active');
-  }catch(err){ showToast('Failed to place order. Try again.', 'error'); console.error(err); }
-  btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Place Order';
+    selectedPackage = null;
+
+  } catch (err) {
+    console.error('❌ Order Error:', err);
+    showToast('Failed to place order: ' + (err.message || 'Please try again.'), 'error');
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Place Order';
 });
 </script>
 </body>
