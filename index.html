@@ -331,12 +331,28 @@ footer{background:var(--bg2); border-top:1px solid var(--border); padding:60px 2
       <div><h4 id="modalPkgName" style="font-family:'Poppins';font-size:1rem;"></h4><span class="price" id="modalPkgPrice"></span></div>
     </div>
     <form id="orderForm">
-      <div class="form-group"><label for="orderName">Your UID</label><input type="text" id="orderName" required></div>
-      <div class="form-group"><label for="orderContact">Email / Phone</label><input type="text" id="orderContact" required></div>
-      <div class="form-group"><label for="orderQty">Quantity</label><input type="number" id="orderQty" min="1" value="1" required></div>
-      <div class="form-group"><label for="transactionId">TRANSACTION ID</label><input type="text" id="transactionId" required></div>
-      <p style="color:var(--secondary);font-weight:600;text-align:center;margin:10px 0;">Our Bkash, Nagad Number: 01770206757</p>
-      <button type="submit" class="btn btn-primary btn-full"><i class="fa-solid fa-paper-plane"></i> Place Order</button>
+      <div class="form-group">
+        <label for="orderName">Your UID</label>
+        <input type="text" id="orderName" required>
+      </div>
+      <div class="form-group">
+        <label for="orderContact">Email / Phone</label>
+        <input type="text" id="orderContact" required>
+      </div>
+      <div class="form-group">
+        <label for="orderQty">Quantity</label>
+        <input type="number" id="orderQty" min="1" value="1" required>
+      </div>
+      <div class="form-group">
+        <label for="transactionId">TRANSACTION ID</label>
+        <input type="text" id="transactionId" required>
+      </div>
+      <p style="color:var(--secondary);font-weight:600;text-align:center;margin:10px 0;">
+        <i class="fa-solid fa-mobile-screen-button"></i> Our Bkash, Nagad Number: 01770206757
+      </p>
+      <button type="submit" class="btn btn-primary btn-full">
+        <i class="fa-solid fa-paper-plane"></i> Place Order
+      </button>
     </form>
   </div>
 </div>
