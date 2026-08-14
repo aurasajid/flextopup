@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GameVault - Premium Game Items</title>
+<link id="favicon" rel="icon" href="https://cdn-icons-png.flaticon.com/512/686/686589.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root{ --radius:16px; --transition: all .3s cubic-bezier(.4,0,.2,1); }
+[data-theme="dark"]{
+  --bg:#0b0b18; --bg2:#12122a; --card:#161634; --card2:#1c1c40;
+  --text:#eef0ff; --text2:#a3a3c9; --border:rgba(255,255,255,.08);
+  --primary:#7c5cff; --primary2:#5b3df0; --secondary:#00e5ff; --accent:#ff3d90;
+  --shadow: 0 10px 40px rgba(0,0,0,.5); --glass: rgba(22,22,52,.65);
+  --success:#2ecc71; --danger:#ff4d6d; --warn:#ffb347;
+}
+[data-theme="light"]{
+  --bg:#f3f4fc; --bg2:#ffffff; --card:#ffffff; --card2:#f7f7ff;
+  --text:#171730; --text2:#5c5c7a; --border:rgba(0,0,0,.08);
+  --primary:#6c4cf5; --primary2:#5638d6; --secondary:#00b8d9; --accent:#ff3d90;
+  --shadow: 0 10px 30px rgba(90,90,150,.15); --glass: rgba(255,255,255,.75);
+  --success:#22b566; --danger:#e63e5c; --warn:#e6952f;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{ font-family:'Poppins',sans-serif; background:var(--bg); color:var(--text); transition: background .4s ease, color .4s ease; overflow-x:hidden; }
+h1,h2,h3,h4{font-family:'Orbitron',sans-serif; letter-spacing:.5px;}
+a{text-decoration:none; color:inherit;}
+img{max-width:100%; display:block;}
+::selection{background:var(--primary); color:#fff;}
+::-webkit-scrollbar{width:8px;}
+::-webkit-scrollbar-thumb{background:var(--primary); border-radius:10px;}
+
+#preloader{position:fixed; inset:0; background:var(--bg); z-index:9999; display:flex; align-items:center; justify-content:center; transition:opacity .5s ease, visibility .5s;}
+.loader-ring{width:60px;height:60px;border:5px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+#preloader.hide{opacity:0; visibility:hidden;}
+
+.btn{display:inline-flex; align-items:center; gap:8px; padding:13px 28px; border:none; border-radius:50px; font-weight:600; font-size:.95rem; cursor:pointer; transition:var(--transition); white-space:nowrap;}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary2)); color:#fff; box-shadow:0 8px 25px rgba(124,92,255,.4);}
+.btn-primary:hover{transform:translateY(-3px); box-shadow:0 12px 30px rgba(124,92,255,.55);}
+.btn-outline{background:transparent; border:2px solid var(--primary); color:var(--text);}
+.btn-outline:hover{background:var(--primary); color:#fff; transform:translateY(-3px);}
+.btn-google{background:var(--card); border:1px solid var(--border); color:var(--text);}
+.btn-google:hover{border-color:var(--primary); transform:translateY(-2px);}
+.btn-danger{background:var(--danger); color:#fff;}
+.btn-sm{padding:9px 18px; font-size:.85rem;}
+.btn-full{width:100%; justify-content:center;}
+
+.navbar{position:fixed; top:0; left:0; width:100%; z-index:1000; padding:18px 0; transition:var(--transition); background:transparent;}
+.navbar.scrolled{background:var(--glass); backdrop-filter:blur(16px); box-shadow:var(--shadow); padding:12px 0;}
+.nav-container{max-width:1300px; margin:0 auto; padding:0 30px; display:flex; align-items:center; justify-content:space-between;}
+.logo-wrap{display:flex; align-items:center; gap:12px;}
+#logoImg{width:42px; height:42px; border-radius:12px; object-fit:cover;}
+#logoFallback{width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,var(--primary),var(--secondary)); font-size:1.3rem; color:#fff;}
+.site-name{font-family:'Orbitron',sans-serif; font-weight:800; font-size:1.3rem; background:linear-gradient(135deg,var(--primary),var(--secondary)); -webkit-background-clip:text; background-clip:text; color:transparent;}
+.nav-links{display:flex; align-items:center; gap:35px; list-style:none;}
+.nav-links a{font-weight:500; position:relative; padding:6px 0; transition:var(--transition);}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:2px;background:var(--secondary);transition:var(--transition);}
+.nav-links a:hover::after{width:100%;}
+.nav-links a:hover{color:var(--primary);}
+.nav-right{display:flex; align-items:center; gap:14px;}
+#themeToggle{width:42px;height:42px;border-radius:50%;border:1px solid var(--border);background:var(--card);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text);transition:var(--transition);}
+#themeToggle:hover{transform:rotate(20deg); border-color:var(--primary);}
+#hamburger{display:none; flex-direction:column; gap:5px; cursor:pointer; z-index:1100;}
+#hamburger span{width:26px;height:3px;background:var(--text);border-radius:5px;transition:var(--transition);}
+
+/* Auth nav area */
+#loginNavBtn{display:flex;}
+.user-menu{position:relative; display:none;}
+.user-avatar-btn{width:42px;height:42px;border-radius:50%; border:2px solid var(--primary); cursor:pointer; overflow:hidden; background:linear-gradient(135deg,var(--primary),var(--secondary)); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700;}
+.user-avatar-btn img{width:100%;height:100%;object-fit:cover;}
+.user-dropdown{
+  position:absolute; top:52px; right:0; background:var(--card); border:1px solid var(--border); border-radius:14px;
+  min-width:190px; box-shadow:var(--shadow); opacity:0; visibility:hidden; transform:translateY(-10px); transition:var(--transition); overflow:hidden; z-index:1200;
+}
+.user-dropdown.open{opacity:1; visibility:visible; transform:translateY(0);}
+.user-dropdown a, .user-dropdown button{display:flex; align-items:center; gap:10px; padding:13px 18px; width:100%; background:none; border:none; color:var(--text); font-family:inherit; font-size:.9rem; cursor:pointer; transition:var(--transition); text-align:left;}
+.user-dropdown a:hover, .user-dropdown button:hover{background:var(--bg2); color:var(--primary);}
+.user-dropdown hr{border:none; border-top:1px solid var(--border);}
+
+.hero{position:relative; min-height:100vh; display:flex; align-items:center; justify-content:center; text-align:center; padding:120px 20px 80px; overflow:hidden;}
+.hero-shapes{position:absolute; inset:0; z-index:0;}
+.shape{position:absolute; border-radius:50%; filter:blur(70px); opacity:.35; animation:float 8s ease-in-out infinite;}
+.shape1{width:350px;height:350px; background:var(--primary); top:-80px; left:-80px;}
+.shape2{width:300px;height:300px; background:var(--secondary); bottom:-60px; right:-60px; animation-delay:2s;}
+.shape3{width:250px;height:250px; background:var(--accent); top:40%; left:60%; animation-delay:4s;}
+@keyframes float{0%,100%{transform:translateY(0) scale(1);}50%{transform:translateY(-40px) scale(1.1);}}
+.hero-content{position:relative; z-index:2; max-width:800px;}
+.tag-pill{display:inline-block; padding:8px 20px; border-radius:50px; background:var(--card); border:1px solid var(--border); font-size:.85rem; color:var(--secondary); margin-bottom:20px; font-weight:600;}
+.hero h1{font-size:clamp(2.2rem,5.5vw,4rem); line-height:1.15; margin-bottom:20px; background:linear-gradient(135deg,var(--text),var(--primary),var(--secondary)); -webkit-background-clip:text; background-clip:text; color:transparent;}
+.hero p{font-size:1.15rem; color:var(--text2); max-width:600px; margin:0 auto 35px;}
+.hero-btns{display:flex; gap:18px; justify-content:center; flex-wrap:wrap;}
+
+.section{padding:100px 20px; max-width:1300px; margin:0 auto;}
+.section-header{text-align:center; max-width:600px; margin:0 auto 55px;}
+.section-tag{color:var(--secondary); font-weight:700; letter-spacing:2px; font-size:.85rem; text-transform:uppercase;}
+.section-header h2{font-size:clamp(1.8rem,4vw,2.6rem); margin:12px 0;}
+.section-header p{color:var(--text2);}
+.empty-msg{text-align:center; color:var(--text2); padding:40px; grid-column:1/-1;}
+
+.reveal{opacity:0; transform:translateY(40px); transition:opacity .7s ease, transform .7s ease;}
+.reveal.visible{opacity:1; transform:translateY(0);}
+
+.games-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:28px;}
+.game-card{background:var(--card); border-radius:var(--radius); overflow:hidden; border:1px solid var(--border); transition:var(--transition); position:relative;}
+.game-card:hover{transform:translateY(-10px); box-shadow:var(--shadow); border-color:var(--primary);}
+.game-img-wrap{position:relative; height:280px; overflow:hidden;}
+.game-img-wrap img{width:100%; height:100%; object-fit:cover; transition:transform .5s ease;}
+.game-card:hover .game-img-wrap img{transform:scale(1.12);}
+.game-overlay{position:absolute; inset:0; background:linear-gradient(to top, var(--card) 5%, transparent 60%);}
+.game-info{padding:20px; position:relative;}
+.game-genre{color:var(--secondary); font-size:.8rem; font-weight:700; text-transform:uppercase; letter-spacing:1px;}
+.game-info h3{margin:8px 0 16px; font-size:1.2rem;}
+
+.filter-chips{display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-bottom:45px;}
+.chip{padding:10px 22px; border-radius:50px; background:var(--card); border:1px solid var(--border); cursor:pointer; font-weight:600; font-size:.9rem; transition:var(--transition); color:var(--text);}
+.chip.active, .chip:hover{background:linear-gradient(135deg,var(--primary),var(--primary2)); color:#fff; border-color:transparent;}
+
+.packages-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:28px;}
+.package-card{background:var(--card); border-radius:var(--radius); border:1px solid var(--border); overflow:hidden; position:relative; transition:var(--transition);}
+.package-card:hover{transform:translateY(-8px); box-shadow:var(--shadow); border-color:var(--secondary);}
+.badge-ribbon{position:absolute; top:16px; left:-6px; background:linear-gradient(135deg,var(--accent),#ff7a5c); color:#fff; padding:6px 16px; font-size:.75rem; font-weight:700; z-index:2; border-radius:0 20px 20px 0; box-shadow:0 4px 10px rgba(0,0,0,.3);}
+.pkg-img-wrap{height:170px; overflow:hidden;}
+.pkg-img-wrap img{width:100%; height:100%; object-fit:cover; transition:transform .5s ease;}
+.package-card:hover .pkg-img-wrap img{transform:scale(1.1);}
+.pkg-info{padding:20px;}
+.pkg-game-tag{font-size:.75rem; color:var(--secondary); font-weight:700; text-transform:uppercase;}
+.pkg-info h4{margin:8px 0; font-size:1.1rem;}
+.pkg-desc{color:var(--text2); font-size:.88rem; margin-bottom:16px; min-height:20px;}
+.pkg-price-row{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+.old-price{text-decoration:line-through; color:var(--text2); font-size:.85rem; margin-right:8px;}
+.price{font-size:1.3rem; font-weight:800; color:var(--secondary);}
+
+.features-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:26px;}
+.feature-card{background:var(--card); padding:35px 25px; border-radius:var(--radius); text-align:center; border:1px solid var(--border); transition:var(--transition);}
+.feature-card:hover{transform:translateY(-8px); border-color:var(--primary); box-shadow:var(--shadow);}
+.feature-icon{width:65px; height:65px; margin:0 auto 20px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,var(--primary),var(--secondary)); font-size:1.6rem; color:#fff;}
+.feature-card h4{margin-bottom:10px;}
+.feature-card p{color:var(--text2); font-size:.9rem;}
+
+footer{background:var(--bg2); border-top:1px solid var(--border); padding:60px 20px 25px; margin-top:60px;}
+.footer-container{max-width:1300px; margin:0 auto; display:flex; flex-wrap:wrap; justify-content:space-between; gap:40px; padding-bottom:30px;}
+.footer-brand p{color:var(--text2); margin-top:14px; max-width:320px;}
+.footer-links h4{margin-bottom:18px; font-size:1rem;}
+.footer-links ul{list-style:none;}
+.footer-links li{margin-bottom:10px;}
+.footer-links a{color:var(--text2); transition:var(--transition);}
+.footer-links a:hover{color:var(--primary); padding-left:5px;}
+.social-icons{display:flex; gap:12px; margin-top:16px;}
+.social-icons a{width:38px; height:38px; border-radius:50%; background:var(--card); display:flex; align-items:center; justify-content:center; border:1px solid var(--border); transition:var(--transition);}
+.social-icons a:hover{background:var(--primary); transform:translateY(-4px);}
+.footer-bottom{text-align:center; padding-top:25px; border-top:1px solid var(--border); color:var(--text2); font-size:.85rem;}
+
+.modal{position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:2000; display:flex; align-items:center; justify-content:center; opacity:0; visibility:hidden; transition:var(--transition); padding:20px;}
+.modal.active{opacity:1; visibility:visible;}
+.modal-box{background:var(--card2); border-radius:var(--radius); padding:35px; max-width:450px; width:100%; transform:scale(.9); transition:var(--transition); border:1px solid var(--border); position:relative; max-height:90vh; overflow-y:auto;}
+.modal.active .modal-box{transform:scale(1);}
+.modal-box.wide{max-width:600px;}
+.modal-close{position:absolute; top:18px; right:18px; width:34px;height:34px; border-radius:50%; background:var(--card); border:none; cursor:pointer; color:var(--text); font-size:1rem;}
+.modal-pkg-preview{display:flex; align-items:center; gap:14px; margin-bottom:22px; padding-bottom:20px; border-bottom:1px solid var(--border);}
+.modal-pkg-preview img{width:60px;height:60px; border-radius:10px; object-fit:cover;}
+.form-group{margin-bottom:18px;}
+.form-group label{display:block; margin-bottom:8px; font-size:.9rem; font-weight:600; color:var(--text2);}
+.form-group input, .form-group textarea{width:100%; padding:12px 15px; border-radius:10px; border:1px solid var(--border); background:var(--bg2); color:var(--text); font-family:inherit; font-size:.95rem; transition:var(--transition);}
+.form-group input:focus, .form-group textarea:focus{outline:none; border-color:var(--primary); box-shadow:0 0 0 3px rgba(124,92,255,.2);}
+.form-group input:disabled{opacity:.65;}
+.divider{display:flex; align-items:center; gap:12px; margin:20px 0; color:var(--text2); font-size:.8rem;}
+.divider::before, .divider::after{content:''; flex:1; height:1px; background:var(--border);}
+
+/* Profile modal */
+.profile-header{display:flex; align-items:center; gap:18px; margin-bottom:26px; padding-bottom:22px; border-bottom:1px solid var(--border);}
+.profile-avatar{width:70px;height:70px;border-radius:50%; overflow:hidden; border:3px solid var(--primary); flex-shrink:0; background:linear-gradient(135deg,var(--primary),var(--secondary)); display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.6rem;font-weight:700;}
+.profile-avatar img{width:100%;height:100%;object-fit:cover;}
+.profile-header h3{margin-bottom:4px; font-family:'Poppins'; font-size:1.15rem;}
+.profile-header p{color:var(--text2); font-size:.85rem;}
+.profile-stats{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:26px;}
+.pstat-card{background:var(--bg2); border-radius:12px; padding:18px; text-align:center; border:1px solid var(--border);}
+.pstat-card h4{font-size:1.5rem; color:var(--secondary); font-family:'Orbitron';}
+.pstat-card span{font-size:.78rem; color:var(--text2); text-transform:uppercase; letter-spacing:.5px;}
+.profile-orders h4{margin-bottom:14px; font-size:1rem; font-family:'Poppins'; font-weight:600;}
+.porder-item{display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid var(--border); gap:10px;}
+.porder-item:last-child{border-bottom:none;}
+.porder-info{font-size:.85rem;}
+.porder-info small{color:var(--text2); display:block;}
+.status-badge{padding:4px 12px; border-radius:20px; font-size:.72rem; font-weight:700; text-transform:capitalize; white-space:nowrap;}
+.status-pending{background:rgba(255,179,71,.15); color:var(--warn);}
+.status-processing{background:rgba(0,229,255,.15); color:var(--secondary);}
+.status-completed{background:rgba(46,204,113,.15); color:var(--success);}
+.status-cancelled{background:rgba(255,77,109,.15); color:var(--danger);}
+
+#toastContainer{position:fixed; bottom:25px; right:25px; z-index:3000; display:flex; flex-direction:column; gap:12px;}
+.toast{background:var(--card); border-left:4px solid var(--primary); padding:15px 22px; border-radius:10px; box-shadow:var(--shadow); display:flex; align-items:center; gap:10px; transform:translateX(120%); opacity:0; transition:all .4s ease; min-width:260px;}
+.toast.show{transform:translateX(0); opacity:1;}
+.toast-success{border-color:var(--success);}
+.toast-error{border-color:var(--danger);}
+
+#backToTop{position:fixed; bottom:25px; left:25px; width:48px; height:48px; border-radius:50%; background:linear-gradient(135deg,var(--primary),var(--secondary)); color:#fff; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1.1rem; opacity:0; visibility:hidden; transition:var(--transition); z-index:900; box-shadow:0 8px 20px rgba(124,92,255,.4);}
+#backToTop.show{opacity:1; visibility:visible;}
+#backToTop:hover{transform:translateY(-5px);}
+
+@media(max-width:860px){
+  .nav-links{position:fixed; top:0; right:-100%; width:75%; height:100vh; background:var(--glass); backdrop-filter:blur(20px); flex-direction:column; justify-content:center; gap:30px; transition:.4s ease; padding:40px;}
+  .nav-links.active{right:0;}
+  #hamburger{display:flex;}
+  #hamburger.active span:nth-child(1){transform:rotate(45deg) translate(6px,6px);}
+  #hamburger.active span:nth-child(2){opacity:0;}
+  #hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(6px,-6px);}
+  .footer-container{flex-direction:column;}
+  .profile-stats{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div id="preloader"><div class="loader-ring"></div></div>
+
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <div class="logo-wrap">
+      <img id="logoImg" src="" alt="logo" style="display:none;">
+      <div id="logoFallback"><i class="fa-solid fa-gamepad"></i></div>
+      <span class="site-name">GameVault</span>
+    </div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#games">Games</a></li>
+      <li><a href="#packages">Packages</a></li>
+      <li><a href="#features">Why Us</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <button id="themeToggle"><i class="fa-solid fa-sun" id="themeIcon"></i></button>
+      <button class="btn btn-primary btn-sm" id="loginNavBtn"><i class="fa-brands fa-google"></i> Login</button>
+      <div class="user-menu" id="userMenu">
+        <button class="user-avatar-btn" id="userAvatarBtn"><span id="avatarInitial">U</span><img id="avatarImg" src="" style="display:none;"></button>
+        <div class="user-dropdown" id="userDropdown">
+          <a id="ddName" style="font-weight:700; cursor:default;">User</a>
+          <a id="ddEmail" style="color:var(--text2); font-size:.8rem; cursor:default; margin-top:-8px;">email@example.com</a>
+          <hr>
+          <button id="openProfileBtn"><i class="fa-solid fa-user"></i> My Profile</button>
+          <button id="logoutBtn"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button>
+        </div>
+      </div>
+      <div id="hamburger"><span></span><span></span><span></span></div>
+    </div>
+  </div>
+</nav>
+
+<section class="hero" id="home">
+  <div class="hero-shapes"><div class="shape shape1"></div><div class="shape shape2"></div><div class="shape shape3"></div></div>
+  <div class="hero-content">
+    <span class="tag-pill" id="tagline">Your trusted marketplace for gamers</span>
+    <h1 id="heroTitle">Level Up Your Game</h1>
+    <p id="heroSubtitle">Premium in-game items, top-ups & packages delivered instantly.</p>
+    <div class="hero-btns">
+      <a href="#games" class="btn btn-primary"><i class="fa-solid fa-rocket"></i> Explore Games</a>
+      <a href="#packages" class="btn btn-outline"><i class="fa-solid fa-box-open"></i> View Packages</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="games">
+  <div class="section-header reveal">
+    <span class="section-tag">Our Catalog</span>
+    <h2>Popular Games</h2>
+    <p>Choose your game and explore exclusive item packages.</p>
+  </div>
+  <div class="games-grid" id="gamesGrid"><p class="empty-msg">Loading games...</p></div>
+</section>
+
+<section class="section" id="packages">
+  <div class="section-header reveal">
+    <span class="section-tag">Marketplace</span>
+    <h2>Item Packages</h2>
+    <p>Instant delivery. Best prices. Secure checkout.</p>
+  </div>
+  <div class="filter-chips" id="filterChips"></div>
+  <div class="packages-grid" id="packagesGrid"><p class="empty-msg">Loading packages...</p></div>
+</section>
+
+<section class="section" id="features">
+  <div class="section-header reveal">
+    <span class="section-tag">Why Choose Us</span>
+    <h2>Built For Gamers</h2>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card reveal"><div class="feature-icon"><i class="fa-solid fa-bolt"></i></div><h4>Instant Delivery</h4><p>Get your items delivered within minutes of order confirmation.</p></div>
+    <div class="feature-card reveal" style="transition-delay:.1s"><div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div><h4>Secure & Safe</h4><p>Every transaction is protected and verified for your safety.</p></div>
+    <div class="feature-card reveal" style="transition-delay:.2s"><div class="feature-icon"><i class="fa-solid fa-headset"></i></div><h4>24/7 Support</h4><p>Our team is always available to help with any issue.</p></div>
+    <div class="feature-card reveal" style="transition-delay:.3s"><div class="feature-icon"><i class="fa-solid fa-tags"></i></div><h4>Best Prices</h4><p>Competitive pricing on all games and packages, always.</p></div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="footer-container">
+    <div class="footer-brand">
+      <div class="logo-wrap"><span class="site-name">GameVault</span></div>
+      <p>Premium marketplace for game items, top-ups and packages, trusted by thousands of gamers worldwide.</p>
+      <div class="social-icons">
+        <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#"><i class="fa-brands fa-twitter"></i></a>
+        <a href="#"><i class="fa-brands fa-discord"></i></a>
+        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+      </div>
+    </div>
+    <div class="footer-links">
+      <h4>Quick Links</h4>
+      <ul><li><a href="#home">Home</a></li><li><a href="#games">Games</a></li><li><a href="#packages">Packages</a></li><li><a href="#features">Why Us</a></li></ul>
+    </div>
+    <div class="footer-links">
+      <h4>Support</h4>
+      <ul><li><a href="#">Help Center</a></li><li><a href="#">Terms of Service</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Refund Policy</a></li></ul>
+    </div>
+  </div>
+  <div class="footer-bottom" id="footerText">© 2024 GameVault. All rights reserved.</div>
+</footer>
+
+<button id="backToTop"><i class="fa-solid fa-arrow-up"></i></button>
+
+<!-- Order Modal -->
+<div class="modal" id="orderModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="document.getElementById('orderModal').classList.remove('active')"><i class="fa-solid fa-xmark"></i></button>
+    <h3 style="margin-bottom:20px;">Place Your Order</h3>
+    <div class="modal-pkg-preview">
+      <img id="modalPkgImg" src="" alt="">
+      <div><h4 id="modalPkgName" style="font-family:'Poppins';font-size:1rem;"></h4><span class="price" id="modalPkgPrice"></span></div>
+    </div>
+    <form id="orderForm">
+      <div class="form-group"><label for="orderName">Your UID</label><input type="text" id="orderName" required></div>
+      <div class="form-group"><label for="orderContact">Email / Phone</label><input type="text" id="orderContact" required></div>
+      <div class="form-group"><label for="orderQty">Quantity</label><input type="number" id="orderQty" min="1" value="1" required></div>
+      <div class="form-group"><label for="orderNote">Note (optional)</label><textarea id="orderNote" rows="3"></textarea></div>
+      <div class="form-group"><label for="transactionId">TRANSACTION ID</label><input type="text" id="transactionId" required></div>
+      <p style="color:var(--secondary);font-weight:600;text-align:center;margin:10px 0;">Our Bkash, Nagad Number: 01770206757</p>
+      <button type="submit" class="btn btn-primary btn-full"><i class="fa-solid fa-paper-plane"></i> Place Order</button>
+    </form>
+  </div>
+</div>
+<!-- Login Modal -->
+<div class="modal" id="loginModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="document.getElementById('loginModal').classList.remove('active')"><i class="fa-solid fa-xmark"></i></button>
+    <div style="text-align:center;">
+      <div style="width:60px;height:60px;border-radius:16px;margin:0 auto 18px;background:linear-gradient(135deg,var(--primary),var(--secondary));display:flex;align-items:center;justify-content:center;font-size:1.6rem;color:#fff;"><i class="fa-solid fa-user"></i></div>
+      <h3>Welcome to GameVault</h3>
+      <p style="color:var(--text2); font-size:.9rem; margin:10px 0 24px;">Login to track your orders and spending history</p>
+      <button class="btn btn-google btn-full" id="googleLoginBtn"><i class="fa-brands fa-google"></i> Continue with Google</button>
+    </div>
+  </div>
+</div>
+
+<!-- Profile Modal -->
+<div class="modal" id="profileModal">
+  <div class="modal-box wide">
+    <button class="modal-close" onclick="document.getElementById('profileModal').classList.remove('active')"><i class="fa-solid fa-xmark"></i></button>
+    <div class="profile-header">
+      <div class="profile-avatar" id="profileAvatar"><span id="profileInitial">U</span><img id="profileImg" src="" style="display:none;"></div>
+      <div><h3 id="profileName">User Name</h3><p id="profileEmail">email@example.com</p><p id="profileJoined" style="font-size:.75rem;margin-top:4px;">Member since -</p></div>
+    </div>
+    <div class="profile-stats">
+      <div class="pstat-card"><h4 id="profileTotalSpent">৳0</h4><span>Total Spent</span></div>
+      <div class="pstat-card"><h4 id="profileTotalOrders">0</h4><span>Total Orders</span></div>
+    </div>
+    <div class="profile-orders">
+      <h4><i class="fa-solid fa-clock-rotate-left"></i> Order History</h4>
+      <div id="profileOrdersList"><p class="empty-msg">No orders yet.</p></div>
+    </div>
+  </div>
+</div>
+
+<div id="toastContainer"></div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyBLq1SlpeLAVJfcPwFLTpBE7BqqLOhiWXs",
+  authDomain: "diamond-expert.firebaseapp.com",
+  projectId: "diamond-expert",
+  storageBucket: "diamond-expert.firebasestorage.app",
+  messagingSenderId: "229854776607",
+  appId: "1:229854776607:web:7c8884b704d6608ef8742a",
+  measurementId: "G-C0FYFDY6NZ"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+const googleProvider = new firebase.auth.GoogleAuthProvider();
+let currentUser = null;
+
+/* Preloader */
+window.addEventListener('load', ()=> document.getElementById('preloader').classList.add('hide'));
+
+/* Theme */
+const root = document.documentElement;
+const savedTheme = localStorage.getItem('theme') || 'dark';
+root.setAttribute('data-theme', savedTheme);
+updateThemeIcon(savedTheme);
+function updateThemeIcon(theme){ document.getElementById('themeIcon').className = theme==='dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon'; }
+document.getElementById('themeToggle').addEventListener('click', ()=>{
+  const next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+  root.setAttribute('data-theme', next); localStorage.setItem('theme', next); updateThemeIcon(next);
+});
+
+/* Mobile nav */
+const hamburger = document.getElementById('hamburger');
+const navLinks = document.getElementById('navLinks');
+hamburger.addEventListener('click', ()=>{ navLinks.classList.toggle('active'); hamburger.classList.toggle('active'); });
+document.querySelectorAll('.nav-links a').forEach(a=> a.addEventListener('click', ()=>{ navLinks.classList.remove('active'); hamburger.classList.remove('active'); }));
+
+/* Navbar scroll */
+window.addEventListener('scroll', ()=>{
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+  document.getElementById('backToTop').classList.toggle('show', window.scrollY > 400);
+});
+document.getElementById('backToTop').addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
+
+/* Reveal */
+function observeReveal(){
+  const els = document.querySelectorAll('.reveal:not(.visible)');
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, {threshold:0.12});
+  els.forEach(el=> obs.observe(el));
+}
+observeReveal();
+
+/* Toast */
+function showToast(msg, type='info'){
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  toast.innerHTML = `<i class="fa-solid ${type==='success'?'fa-circle-check':type==='error'?'fa-circle-xmark':'fa-circle-info'}"></i> ${msg}`;
+  container.appendChild(toast);
+  setTimeout(()=> toast.classList.add('show'), 10);
+  setTimeout(()=>{ toast.classList.remove('show'); setTimeout(()=> toast.remove(), 300); }, 3500);
+}
+
+/* ---------- CUSTOMER AUTH ---------- */
+document.getElementById('loginNavBtn').addEventListener('click', ()=> document.getElementById('loginModal').classList.add('active'));
+document.getElementById('googleLoginBtn').addEventListener('click', async ()=>{
+  try{
+    await auth.signInWithPopup(googleProvider);
+    document.getElementById('loginModal').classList.remove('active');
+    showToast('Logged in successfully!', 'success');
+  }catch(err){ showToast('Login failed. Try again.', 'error'); console.error(err); }
+});
+document.getElementById('logoutBtn').addEventListener('click', ()=>{ auth.signOut(); document.getElementById('userDropdown').classList.remove('open'); });
+
+const userAvatarBtn = document.getElementById('userAvatarBtn');
+const userDropdown = document.getElementById('userDropdown');
+userAvatarBtn.addEventListener('click', ()=> userDropdown.classList.toggle('open'));
+document.addEventListener('click', e=>{ if(!e.target.closest('.user-menu')) userDropdown.classList.remove('open'); });
+
+auth.onAuthStateChanged(async user=>{
+  currentUser = user;
+  if(user){
+    document.getElementById('loginNavBtn').style.display = 'none';
+    document.getElementById('userMenu').style.display = 'block';
+    const initial = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
+    document.getElementById('avatarInitial').textContent = initial;
+    document.getElementById('ddName').textContent = user.displayName || 'User';
+    document.getElementById('ddEmail').textContent = user.email || '';
+    if(user.photoURL){
+      document.getElementById('avatarImg').src = user.photoURL;
+      document.getElementById('avatarImg').style.display='block';
+      document.getElementById('avatarInitial').style.display='none';
+    } else {
+      document.getElementById('avatarImg').style.display='none';
+      document.getElementById('avatarInitial').style.display='block';
+    }
+    // Upsert user profile doc
+    const userRef = db.collection('users').doc(user.uid);
+    const snap = await userRef.get();
+    if(!snap.exists){
+      await userRef.set({
+        name: user.displayName || '',
+        email: user.email || '',
+        photoURL: user.photoURL || '',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    } else {
+      await userRef.update({ lastLogin: firebase.firestore.FieldValue.serverTimestamp(), name: user.displayName||'', photoURL: user.photoURL||'' });
+    }
+  } else {
+    document.getElementById('loginNavBtn').style.display = 'flex';
+    document.getElementById('userMenu').style.display = 'none';
+  }
+});
+
+/* Profile modal */
+document.getElementById('openProfileBtn').addEventListener('click', async ()=>{
+  userDropdown.classList.remove('open');
+  if(!currentUser) return;
+  document.getElementById('profileModal').classList.add('active');
+  const initial = (currentUser.displayName || currentUser.email || 'U').charAt(0).toUpperCase();
+  document.getElementById('profileName').textContent = currentUser.displayName || 'User';
+  document.getElementById('profileEmail').textContent = currentUser.email || '';
+  document.getElementById('profileInitial').textContent = initial;
+  if(currentUser.photoURL){
+    document.getElementById('profileImg').src = currentUser.photoURL;
+    document.getElementById('profileImg').style.display='block';
+    document.getElementById('profileInitial').style.display='none';
+  } else {
+    document.getElementById('profileImg').style.display='none';
+    document.getElementById('profileInitial').style.display='block';
+  }
+  try{
+    const userDoc = await db.collection('users').doc(currentUser.uid).get();
+    if(userDoc.exists && userDoc.data().createdAt){
+      const d = userDoc.data().createdAt.toDate();
+      document.getElementById('profileJoined').textContent = 'Member since ' + (d ? d.toLocaleDateString() : 'N/A');
+    }
+  }catch(e){}
+
+  try{
+    const ordersSnap = await db.collection('orders').where('uid','==', currentUser.uid).get();
+    let orders = []; ordersSnap.forEach(d=> orders.push({id:d.id, ...d.data()}));
+    orders.sort((a,b)=>{
+      const ta = a.createdAt && a.createdAt.toDate ? a.createdAt.toDate().getTime() : 0;
+      const tb = b.createdAt && b.createdAt.toDate ? b.createdAt.toDate().getTime() : 0;
+      return tb - ta;
+    });
+    const totalSpent = orders.filter(o=> o.status !== 'cancelled').reduce((sum,o)=> sum + (Number(o.price)||0) * (Number(o.quantity)||1), 0);
+    document.getElementById('profileTotalSpent').textContent = '৳' + totalSpent.toFixed(2);
+    document.getElementById('profileTotalOrders').textContent = orders.length;
+    const list = document.getElementById('profileOrdersList');
+    if(orders.length === 0){ list.innerHTML = '<p class="empty-msg">No orders yet.</p>'; }
+    else{
+      list.innerHTML = orders.map(o=>{
+        const date = o.createdAt && o.createdAt.toDate ? o.createdAt.toDate().toLocaleDateString() : '-';
+        const total = ((Number(o.price)||0) * (Number(o.quantity)||1)).toFixed(2);
+        return `<div class="porder-item">
+          <div class="porder-info"><strong>${o.packageTitle||'-'}</strong><small>${o.gameName||''} • Qty: ${o.quantity||1} • ${date}</small></div>
+          <div style="text-align:right;">
+            <div style="font-weight:700;color:var(--secondary);">৳${total}</div>
+            <span class="status-badge status-${o.status||'pending'}">${o.status||'pending'}</span>
+          </div>
+        </div>`;
+      }).join('');
+    }
+  }catch(err){ console.error(err); }
+});
+
+/* Config listener */
+db.collection('config').doc('site').onSnapshot(doc=>{
+  const data = doc.exists ? doc.data() : {};
+  const siteName = data.siteName || 'GameVault';
+  document.title = siteName + ' - Premium Game Items';
+  document.querySelectorAll('.site-name').forEach(el=> el.textContent = siteName);
+  document.getElementById('footerText').textContent = `© ${new Date().getFullYear()} ${siteName}. All rights reserved.`;
+  const logoImg = document.getElementById('logoImg');
+  const logoFallback = document.getElementById('logoFallback');
+  if(data.logoUrl){
+    logoImg.src = data.logoUrl; logoImg.style.display='block'; logoFallback.style.display='none';
+    document.getElementById('favicon').href = data.logoUrl;
+  } else { logoImg.style.display='none'; logoFallback.style.display='flex'; }
+  document.getElementById('heroTitle').textContent = data.heroTitle || 'Level Up Your Game';
+  document.getElementById('heroSubtitle').textContent = data.heroSubtitle || 'Premium in-game items, top-ups & packages delivered instantly.';
+  document.getElementById('tagline').textContent = data.tagline || 'Your trusted marketplace for gamers';
+}, err=> console.error(err));
+
+/* Games */
+let gamesCache = [];
+const gamesGrid = document.getElementById('gamesGrid');
+const filterChips = document.getElementById('filterChips');
+
+db.collection('games').orderBy('order','asc').onSnapshot(snap=>{
+  gamesCache = []; snap.forEach(d=> gamesCache.push({id:d.id, ...d.data()}));
+  renderGames(); renderFilterChips();
+}, err=>{ gamesGrid.innerHTML = '<p class="empty-msg">Unable to load games.</p>'; });
+
+function renderGames(){
+  const active = gamesCache.filter(g=> g.active !== false);
+  if(active.length===0){ gamesGrid.innerHTML = '<p class="empty-msg">No games available yet. Check back soon!</p>'; return; }
+  gamesGrid.innerHTML = active.map((g,i)=>`
+    <div class="game-card reveal" style="transition-delay:${i*0.07}s">
+      <div class="game-img-wrap"><img src="${g.image||'https://via.placeholder.com/400x500?text=Game'}" alt="${g.name}" loading="lazy"><div class="game-overlay"></div></div>
+      <div class="game-info">
+        <span class="game-genre">${g.genre||'Game'}</span>
+        <h3>${g.name}</h3>
+        <button class="btn btn-outline btn-sm" onclick="filterByGame('${g.id}')"><i class="fa-solid fa-boxes-stacked"></i> View Packages</button>
+      </div>
+    </div>`).join('');
+  observeReveal();
+}
+
+function renderFilterChips(){
+  const active = gamesCache.filter(g=> g.active !== false);
+  filterChips.innerHTML = `<button class="chip active" data-id="all">All Games</button>` +
+    active.map(g=>`<button class="chip" data-id="${g.id}">${g.name}</button>`).join('');
+  filterChips.querySelectorAll('.chip').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      filterChips.querySelectorAll('.chip').forEach(c=> c.classList.remove('active'));
+      chip.classList.add('active'); renderPackages(chip.dataset.id);
+    });
+  });
+}
+
+function filterByGame(id){
+  document.getElementById('packages').scrollIntoView({behavior:'smooth'});
+  setTimeout(()=>{
+    filterChips.querySelectorAll('.chip').forEach(c=> c.classList.toggle('active', c.dataset.id===id));
+    renderPackages(id);
+  }, 500);
+}
+
+/* Packages */
+let packagesCache = []; let currentFilter='all';
+const packagesGrid = document.getElementById('packagesGrid');
+
+db.collection('packages').orderBy('order','asc').onSnapshot(snap=>{
+  packagesCache = []; snap.forEach(d=> packagesCache.push({id:d.id, ...d.data()}));
+  renderPackages(currentFilter);
+}, err=>{ packagesGrid.innerHTML = '<p class="empty-msg">Unable to load packages.</p>'; });
+
+function renderPackages(filter='all'){
+  currentFilter = filter;
+  const list = filter==='all' ? packagesCache : packagesCache.filter(p=> p.gameId===filter);
+  if(list.length===0){ packagesGrid.innerHTML = '<p class="empty-msg">No packages available for this selection.</p>'; return; }
+  packagesGrid.innerHTML = list.map((p,i)=>`
+    <div class="package-card reveal" style="transition-delay:${i*0.05}s">
+      ${p.badge ? `<span class="badge-ribbon">${p.badge}</span>`:''}
+      <div class="pkg-img-wrap"><img src="${p.image||'https://via.placeholder.com/300x200?text=Package'}" alt="${p.title}" loading="lazy"></div>
+      <div class="pkg-info">
+        <span class="pkg-game-tag">${p.gameName||''}</span>
+        <h4>${p.title}</h4>
+        <p class="pkg-desc">${p.description||''}</p>
+        <div class="pkg-price-row">
+          <div>${p.oldPrice?`<span class="old-price">৳${p.oldPrice}</span>`:''}<span class="price">৳${p.price}</span></div>
+          <button class="btn btn-primary btn-sm buy-btn" data-id="${p.id}"><i class="fa-solid fa-cart-shopping"></i> Buy</button>
+        </div>
+      </div>
+    </div>`).join('');
+  observeReveal();
+}
+
+/* Buy button delegation */
+let selectedPackage = null;
+const orderModal = document.getElementById('orderModal');
+packagesGrid.addEventListener('click', e=>{
+  const btn = e.target.closest('.buy-btn');
+  if(!btn) return;
+  const pkg = packagesCache.find(p=> p.id === btn.dataset.id);
+  if(!pkg) return;
+  selectedPackage = pkg;
+  document.getElementById('modalPkgName').textContent = pkg.title;
+  document.getElementById('modalPkgPrice').textContent = '৳'+pkg.price;
+  document.getElementById('modalPkgImg').src = pkg.image || 'https://via.placeholder.com/100';
+  if(currentUser){
+    document.getElementById('orderName').value = currentUser.displayName || '';
+    document.getElementById('orderContact').value = currentUser.email || '';
+  }
+  orderModal.classList.add('active');
+});
+orderModal.addEventListener('click', e=>{ if(e.target===orderModal) orderModal.classList.remove('active'); });
+
+document.getElementById('orderForm').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const btn = e.target.querySelector('button[type="submit"]');
+  btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Placing...';
+  try{
+    await db.collection('orders').add({
+      uid: currentUser ? currentUser.uid : null,
+      packageId: selectedPackage.id,
+      packageTitle: selectedPackage.title,
+      gameName: selectedPackage.gameName || '',
+      price: selectedPackage.price,
+      quantity: Number(document.getElementById('orderQty').value)||1,
+      name: document.getElementById('orderName').value,
+      contact: document.getElementById('orderContact').value,
+      transactionId: document.getElementById('transactionId').value,
+      note: document.getElementById('orderNote').value,
+      status: 'pending',
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    showToast('Order placed successfully! We will contact you soon.', 'success');
+    e.target.reset();
+    orderModal.classList.remove('active');
+  }catch(err){ showToast('Failed to place order. Try again.', 'error'); console.error(err); }
+  btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Place Order';
+});
+</script>
+</body>
+</html>
