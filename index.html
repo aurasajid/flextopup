@@ -331,10 +331,12 @@ footer{background:var(--bg2); border-top:1px solid var(--border); padding:60px 2
       <div><h4 id="modalPkgName" style="font-family:'Poppins';font-size:1rem;"></h4><span class="price" id="modalPkgPrice"></span></div>
     </div>
     <form id="orderForm">
-      <div class="form-group"><label>Your Name</label><input type="text" id="orderName" required></div>
+      <div class="form-group"><label>Your UID</label><input type="text" id="orderName" required></div>
       <div class="form-group"><label>Email / Phone</label><input type="text" id="orderContact" required></div>
       <div class="form-group"><label>Quantity</label><input type="number" id="orderQty" min="1" value="1" required></div>
       <div class="form-group"><label>Note (optional)</label><textarea id="orderNote" rows="3"></textarea></div>
+      <div class="form-group"><label>TRANSACTION ID</label><input type="text" id="orderContact" required></div>
+      <p>Our Bkash,Nagad Number: 01770206757</p>
       <button type="submit" class="btn btn-primary btn-full"><i class="fa-solid fa-paper-plane"></i> Place Order</button>
     </form>
   </div>
@@ -362,7 +364,7 @@ footer{background:var(--bg2); border-top:1px solid var(--border); padding:60px 2
       <div><h3 id="profileName">User Name</h3><p id="profileEmail">email@example.com</p><p id="profileJoined" style="font-size:.75rem;margin-top:4px;">Member since -</p></div>
     </div>
     <div class="profile-stats">
-      <div class="pstat-card"><h4 id="profileTotalSpent">$0</h4><span>Total Spent</span></div>
+      <div class="pstat-card"><h4 id="profileTotalSpent">৳0</h4><span>Total Spent</span></div>
       <div class="pstat-card"><h4 id="profileTotalOrders">0</h4><span>Total Orders</span></div>
     </div>
     <div class="profile-orders">
@@ -436,8 +438,8 @@ observeReveal();
 function showToast(msg, type='info'){
   const container = document.getElementById('toastContainer');
   const toast = document.createElement('div');
-  toast.className = `toast toast-${type}`;
-  toast.innerHTML = `<i class="fa-solid ${type==='success'?'fa-circle-check':type==='error'?'fa-circle-xmark':'fa-circle-info'}"></i> ${msg}`;
+  toast.className = `toast toast-৳{type}`;
+  toast.innerHTML = `<i class="fa-solid ৳{type==='success'?'fa-circle-check':type==='error'?'fa-circle-xmark':'fa-circle-info'}"></i> ৳{msg}`;
   container.appendChild(toast);
   setTimeout(()=> toast.classList.add('show'), 10);
   setTimeout(()=>{ toast.classList.remove('show'); setTimeout(()=> toast.remove(), 300); }, 3500);
@@ -530,7 +532,7 @@ document.getElementById('openProfileBtn').addEventListener('click', async ()=>{
       return tb - ta;
     });
     const totalSpent = orders.filter(o=> o.status !== 'cancelled').reduce((sum,o)=> sum + (Number(o.price)||0) * (Number(o.quantity)||1), 0);
-    document.getElementById('profileTotalSpent').textContent = '$' + totalSpent.toFixed(2);
+    document.getElementById('profileTotalSpent').textContent = '৳' + totalSpent.toFixed(2);
     document.getElementById('profileTotalOrders').textContent = orders.length;
     const list = document.getElementById('profileOrdersList');
     if(orders.length === 0){ list.innerHTML = '<p class="empty-msg">No orders yet.</p>'; }
@@ -538,10 +540,10 @@ document.getElementById('openProfileBtn').addEventListener('click', async ()=>{
       list.innerHTML = orders.map(o=>{
         const date = o.createdAt && o.createdAt.toDate ? o.createdAt.toDate().toLocaleDateString() : '-';
         return `<div class="porder-item">
-          <div class="porder-info"><strong>${o.packageTitle||'-'}</strong><small>${o.gameName||''} • Qty: ${o.quantity||1} • ${date}</small></div>
+          <div class="porder-info"><strong>৳{o.packageTitle||'-'}</strong><small>৳{o.gameName||''} • Qty: ৳{o.quantity||1} • ৳{date}</small></div>
           <div style="text-align:right;">
-            <div style="font-weight:700;color:var(--secondary);">$${((Number(o.price)||0)*(Number(o.quantity)||1)).toFixed(2)}</div>
-            <span class="status-badge status-${o.status||'pending'}">${o.status||'pending'}</span>
+            <div style="font-weight:700;color:var(--secondary);">৳৳{((Number(o.price)||0)*(Number(o.quantity)||1)).toFixed(2)}</div>
+            <span class="status-badge status-৳{o.status||'pending'}">৳{o.status||'pending'}</span>
           </div>
         </div>`;
       }).join('');
@@ -555,7 +557,7 @@ db.collection('config').doc('site').onSnapshot(doc=>{
   const siteName = data.siteName || 'GameVault';
   document.title = siteName + ' - Premium Game Items';
   document.querySelectorAll('.site-name').forEach(el=> el.textContent = siteName);
-  document.getElementById('footerText').textContent = `© ${new Date().getFullYear()} ${siteName}. All rights reserved.`;
+  document.getElementById('footerText').textContent = `© ৳{new Date().getFullYear()} ৳{siteName}. All rights reserved.`;
   const logoImg = document.getElementById('logoImg');
   const logoFallback = document.getElementById('logoFallback');
   if(data.logoUrl){
@@ -581,12 +583,12 @@ function renderGames(){
   const active = gamesCache.filter(g=> g.active !== false);
   if(active.length===0){ gamesGrid.innerHTML = '<p class="empty-msg">No games available yet. Check back soon!</p>'; return; }
   gamesGrid.innerHTML = active.map((g,i)=>`
-    <div class="game-card reveal" style="transition-delay:${i*0.07}s">
-      <div class="game-img-wrap"><img src="${g.image||'https://via.placeholder.com/400x500?text=Game'}" alt="${g.name}" loading="lazy"><div class="game-overlay"></div></div>
+    <div class="game-card reveal" style="transition-delay:৳{i*0.07}s">
+      <div class="game-img-wrap"><img src="৳{g.image||'https://via.placeholder.com/400x500?text=Game'}" alt="৳{g.name}" loading="lazy"><div class="game-overlay"></div></div>
       <div class="game-info">
-        <span class="game-genre">${g.genre||'Game'}</span>
-        <h3>${g.name}</h3>
-        <button class="btn btn-outline btn-sm" onclick="filterByGame('${g.id}')"><i class="fa-solid fa-boxes-stacked"></i> View Packages</button>
+        <span class="game-genre">৳{g.genre||'Game'}</span>
+        <h3>৳{g.name}</h3>
+        <button class="btn btn-outline btn-sm" onclick="filterByGame('৳{g.id}')"><i class="fa-solid fa-boxes-stacked"></i> View Packages</button>
       </div>
     </div>`).join('');
   observeReveal();
@@ -595,7 +597,7 @@ function renderGames(){
 function renderFilterChips(){
   const active = gamesCache.filter(g=> g.active !== false);
   filterChips.innerHTML = `<button class="chip active" data-id="all">All Games</button>` +
-    active.map(g=>`<button class="chip" data-id="${g.id}">${g.name}</button>`).join('');
+    active.map(g=>`<button class="chip" data-id="৳{g.id}">৳{g.name}</button>`).join('');
   filterChips.querySelectorAll('.chip').forEach(chip=>{
     chip.addEventListener('click', ()=>{
       filterChips.querySelectorAll('.chip').forEach(c=> c.classList.remove('active'));
@@ -626,16 +628,16 @@ function renderPackages(filter='all'){
   const list = filter==='all' ? packagesCache : packagesCache.filter(p=> p.gameId===filter);
   if(list.length===0){ packagesGrid.innerHTML = '<p class="empty-msg">No packages available for this selection.</p>'; return; }
   packagesGrid.innerHTML = list.map((p,i)=>`
-    <div class="package-card reveal" style="transition-delay:${i*0.05}s">
-      ${p.badge ? `<span class="badge-ribbon">${p.badge}</span>`:''}
-      <div class="pkg-img-wrap"><img src="${p.image||'https://via.placeholder.com/300x200?text=Package'}" alt="${p.title}" loading="lazy"></div>
+    <div class="package-card reveal" style="transition-delay:৳{i*0.05}s">
+      ৳{p.badge ? `<span class="badge-ribbon">৳{p.badge}</span>`:''}
+      <div class="pkg-img-wrap"><img src="৳{p.image||'https://via.placeholder.com/300x200?text=Package'}" alt="৳{p.title}" loading="lazy"></div>
       <div class="pkg-info">
-        <span class="pkg-game-tag">${p.gameName||''}</span>
-        <h4>${p.title}</h4>
-        <p class="pkg-desc">${p.description||''}</p>
+        <span class="pkg-game-tag">৳{p.gameName||''}</span>
+        <h4>৳{p.title}</h4>
+        <p class="pkg-desc">৳{p.description||''}</p>
         <div class="pkg-price-row">
-          <div>${p.oldPrice?`<span class="old-price">$${p.oldPrice}</span>`:''}<span class="price">$${p.price}</span></div>
-          <button class="btn btn-primary btn-sm buy-btn" data-id="${p.id}"><i class="fa-solid fa-cart-shopping"></i> Buy</button>
+          <div>৳{p.oldPrice?`<span class="old-price">৳৳{p.oldPrice}</span>`:''}<span class="price">৳৳{p.price}</span></div>
+          <button class="btn btn-primary btn-sm buy-btn" data-id="৳{p.id}"><i class="fa-solid fa-cart-shopping"></i> Buy</button>
         </div>
       </div>
     </div>`).join('');
@@ -652,7 +654,7 @@ packagesGrid.addEventListener('click', e=>{
   if(!pkg) return;
   selectedPackage = pkg;
   document.getElementById('modalPkgName').textContent = pkg.title;
-  document.getElementById('modalPkgPrice').textContent = '$'+pkg.price;
+  document.getElementById('modalPkgPrice').textContent = '৳'+pkg.price;
   document.getElementById('modalPkgImg').src = pkg.image || 'https://via.placeholder.com/100';
   if(currentUser){
     document.getElementById('orderName').value = currentUser.displayName || '';
