@@ -700,6 +700,17 @@ let currentCatalog = 'games';
 let packageCategories = [];
 
 // ============================================================
+// TELEGRAM BOT CONFIG - Loaded from Firebase
+// ============================================================
+let TELEGRAM_BOT_TOKEN = '';
+let TELEGRAM_CHAT_ID = '';
+let TELEGRAM_BOT_ENABLED = false;
+let telegramCommands = []; // Array of {command: 'atp uid 80', packageId: 'xxx', packageName: '115 Diamond'}
+let telegramSuccessMessage = '';
+let telegramDoneMessage = '';
+let lastUpdateId = 0;
+
+// ============================================================
 // PRELOADER
 // ============================================================
 window.addEventListener('load', () => {
@@ -1012,7 +1023,6 @@ fabMainBtn.addEventListener('click', function() {
   fabSubButtons.classList.toggle('open');
 });
 
-// Close FAB sub-buttons when clicking outside
 document.addEventListener('click', function(e) {
   const fabContainer = document.querySelector('.fab-container');
   if (!fabContainer.contains(e.target)) {
@@ -1022,7 +1032,194 @@ document.addEventListener('click', function(e) {
 });
 
 // ============================================================
-// CONFIG - Support for multiple catalogs, fonts, social links, etc.
+// TELEGRAM BOT FUNCTIONS
+// ============================================================
+
+// Format order message for Telegram
+function formatTelegramOrderMessage(orderData) {
+  const date = new Date().toLocaleString('en-US', { 
+    month: 'short', day: 'numeric', year: 'numeric',
+    hour: '2-digit', minute: '2-digit'
+  });
+  
+  return `
+💎 *Nᴇᴡ Oʀᴅᴇʀ Rᴇᴄᴇɪᴠᴇᴅ!*
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+• 👤 *Cᴜsᴛᴏᴍᴇʀ*    : ${orderData.userName || 'User'}
+• 🆔 *Oʀᴅᴇʀ ID*   : #${orderData.id || 'N/A'}
+• 📱 *UID*        : ${orderData.gameUid || 'N/A'}
+• 📦 *Pᴀᴄᴋᴀɢᴇ*   : ${orderData.packageTitle || 'Package'}
+• 🔢 *Qᴛʏ*        : ${orderData.quantity || 1}x
+• 💰 *Aᴍᴏᴜɴᴛ*     : ৳${(orderData.totalPrice || 0).toFixed(2)}
+• 📅 *Dᴀᴛᴇ*       : ${date}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+💬 *Cᴏᴍᴍᴀɴᴅs:*
+${telegramCommands.map(cmd => `• \`${cmd.command}\` - ${cmd.packageName}`).join('\n')}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+`;
+}
+
+// Format completion message
+function formatTelegramCompletionMessage(orderData, uid) {
+  const message = telegramDoneMessage || '💎 Dɪᴀᴍᴏɴᴅ Tᴏᴘ-Uᴘ Dᴏɴᴇ ! !';
+  const successText = telegramSuccessMessage || '✅ Sᴜᴄᴄᴇss';
+  
+  return `
+${message}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+• 🆔 *Oʀᴅᴇʀ ID*   : #${orderData.id || 'N/A'}
+• 👤 *Cᴜsᴛᴏᴍᴇʀ*    : ${orderData.userName || 'User'}
+• 📱 *UID*        : ${uid || orderData.gameUid || 'N/A'}
+• 📦 *Pᴀᴄᴋᴀɢᴇ*   : ${orderData.packageTitle || 'Package'}
+• 🔢 *Qᴛʏ*        : ${orderData.quantity || 1}x
+• 💰 *Aᴍᴏᴜɴᴛ*     : ৳${(orderData.totalPrice || 0).toFixed(2)}
+
+--------------------------------
+➥ *Sᴛᴀᴛᴜs*      : ${successText}
+➥ *Tᴏᴘᴜᴘ Tʏᴘᴇ* : ${orderData.packageTitle || 'Package'}
+--------------------------------
+💎 Mᴇᴍʙᴇʀsʜɪᴘ Sᴇɴᴛ : ${orderData.packageTitle || 'Package'} 💎
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+`;
+}
+
+// Send order to Telegram
+async function sendOrderToTelegram(orderData) {
+  if (!TELEGRAM_BOT_ENABLED || !TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
+    console.log('📢 Telegram bot not configured.');
+    return null;
+  }
+  
+  try {
+    const message = formatTelegramOrderMessage(orderData);
+    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+    
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: TELEGRAM_CHAT_ID,
+        text: message,
+        parse_mode: 'Markdown'
+      })
+    });
+    
+    const data = await response.json();
+    if (data.ok) {
+      console.log('✅ Order sent to Telegram successfully!');
+      await db.collection('orders').doc(orderData.id).update({
+        telegramMsgId: data.result.message_id,
+        telegramSentAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      return data;
+    } else {
+      console.error('❌ Telegram API error:', data.description);
+      return null;
+    }
+  } catch (error) {
+    console.error('❌ Failed to send to Telegram:', error);
+    return null;
+  }
+}
+
+// Process Telegram commands
+async function processTelegramCommand(message) {
+  const text = message.text || '';
+  const lowerText = text.toLowerCase().trim();
+  
+  // Check if message contains any command
+  for (const cmd of telegramCommands) {
+    const commandPattern = cmd.command.toLowerCase();
+    // Match command followed by uid (e.g., "atp uid 80" or "atp uid 80")
+    const regex = new RegExp(`^${commandPattern}\\s+(\\d+)$`, 'i');
+    const match = lowerText.match(regex);
+    
+    if (match) {
+      const uid = match[1];
+      // Find the order that this command corresponds to
+      // Look for the most recent pending order with matching package
+      const ordersSnap = await db.collection('orders')
+        .where('packageTitle', '==', cmd.packageName)
+        .where('status', '==', 'pending')
+        .orderBy('createdAt', 'desc')
+        .limit(1)
+        .get();
+      
+      if (!ordersSnap.empty) {
+        const orderDoc = ordersSnap.docs[0];
+        const orderData = { id: orderDoc.id, ...orderDoc.data() };
+        
+        // Update order status to completed
+        await orderDoc.ref.update({
+          status: 'completed',
+          processedUid: uid,
+          completedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          telegramProcessor: message.from?.username || 'Processor'
+        });
+        
+        // Send completion message
+        const completionMsg = formatTelegramCompletionMessage(orderData, uid);
+        await sendTelegramMessage(TELEGRAM_CHAT_ID, completionMsg);
+        
+        console.log(`✅ Order #${orderData.id} completed via command "${cmd.command}" with UID: ${uid}`);
+        showToast(`✅ Order #${orderData.id} completed!`, 'success');
+        return;
+      } else {
+        // No pending order found for this package
+        await sendTelegramMessage(TELEGRAM_CHAT_ID, 
+          `❌ *No pending order found for "${cmd.packageName}"*`
+        );
+        return;
+      }
+    }
+  }
+}
+
+// Send Telegram message
+async function sendTelegramMessage(chatId, text) {
+  try {
+    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+    await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: text,
+        parse_mode: 'Markdown'
+      })
+    });
+  } catch (error) {
+    console.error('Error sending Telegram message:', error);
+  }
+}
+
+// Poll Telegram for commands
+async function pollTelegramUpdates() {
+  if (!TELEGRAM_BOT_ENABLED || !TELEGRAM_BOT_TOKEN) return;
+  
+  try {
+    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getUpdates?offset=${lastUpdateId + 1}&timeout=10`;
+    const response = await fetch(url);
+    const data = await response.json();
+    
+    if (data.ok && data.result.length > 0) {
+      for (const update of data.result) {
+        lastUpdateId = update.update_id;
+        if (update.message && update.message.text) {
+          await processTelegramCommand(update.message);
+        }
+      }
+    }
+  } catch (error) {
+    console.error('Polling error:', error);
+  }
+}
+
+// ============================================================
+// CONFIG - Load all settings from Firebase
 // ============================================================
 db.collection('config').doc('site').onSnapshot(doc => {
   const data = doc.exists ? doc.data() : {};
@@ -1056,7 +1253,7 @@ db.collection('config').doc('site').onSnapshot(doc => {
   document.getElementById('catalogTitle').textContent = data.catalogTitle || 'Free Fire';
   document.getElementById('catalogSubtitle').textContent = data.catalogSubtitle || '';
   
-  // Font support - changeable through admin panel
+  // Font support
   if (data.fontFamily) {
     document.documentElement.style.setProperty('--font-family', data.fontFamily);
     if (data.headingFont) {
@@ -1068,23 +1265,39 @@ db.collection('config').doc('site').onSnapshot(doc => {
     }
   }
   
-  // Footer Social Links (keep these)
+  // Social Links
   if (data.fbLink) document.getElementById('footerFb').href = data.fbLink;
   if (data.igLink) document.getElementById('footerIg').href = data.igLink;
   if (data.xLink) document.getElementById('footerTw').href = data.xLink;
   if (data.discordLink) document.getElementById('footerDiscord').href = data.discordLink;
   
-  // FAB Support Links - Right Side (Telegram, WhatsApp)
-  if (data.telegramLink) {
-    document.getElementById('telegramFabLink').href = data.telegramLink;
-  }
-  if (data.whatsappLink) {
-    document.getElementById('whatsappFabLink').href = data.whatsappLink;
-  }
+  // FAB Support Links
+  if (data.telegramLink) document.getElementById('telegramFabLink').href = data.telegramLink;
+  if (data.whatsappLink) document.getElementById('whatsappLink').href = data.whatsappLink;
   
   // Package Categories
   packageCategories = data.packageCategories || [];
   renderPackageCategories();
+  
+  // ============================================================
+  // TELEGRAM BOT SETTINGS
+  // ============================================================
+  TELEGRAM_BOT_TOKEN = data.telegramBotToken || '';
+  TELEGRAM_CHAT_ID = data.telegramChatId || '';
+  TELEGRAM_BOT_ENABLED = data.telegramEnabled || false;
+  telegramCommands = data.telegramCommands || [];
+  telegramSuccessMessage = data.telegramSuccessMessage || '✅ Sᴜᴄᴄᴇss';
+  telegramDoneMessage = data.telegramDoneMessage || '💎 Dɪᴀᴍᴏɴᴅ Tᴏᴘ-Uᴘ Dᴏɴᴇ ! !';
+  
+  // Start polling if enabled
+  if (TELEGRAM_BOT_ENABLED && TELEGRAM_BOT_TOKEN) {
+    pollTelegramUpdates();
+    // Poll every 3 seconds
+    if (!window._telegramPolling) {
+      window._telegramPolling = setInterval(pollTelegramUpdates, 3000);
+      console.log('🤖 Telegram polling started');
+    }
+  }
   
   // Catalog type
   currentCatalog = data.catalogType || 'games';
@@ -1107,7 +1320,6 @@ function renderPackageCategories() {
     </button>
   `).join('');
   
-  // Add click event to category chips
   header.querySelectorAll('.package-category-chip').forEach(chip => {
     chip.addEventListener('click', function() {
       header.querySelectorAll('.package-category-chip').forEach(c => c.classList.remove('active'));
@@ -1154,7 +1366,6 @@ function renderGames() {
     </div>
   `).join('');
   
-  // Add click event to game cards
   document.querySelectorAll('.game-card').forEach(card => {
     card.addEventListener('click', function() {
       const gameId = this.dataset.gameId;
@@ -1168,22 +1379,17 @@ function renderGames() {
   observeReveal();
 }
 
-// Show packages for selected game
 function showPackagesForGame(gameId, gameName) {
   currentGameId = gameId;
-  // Hide games grid, show packages section
   document.getElementById('gamesContainer').style.display = 'none';
   packagesSection.classList.add('active');
   
-  // Update header
   document.getElementById('catalogTag').textContent = 'Packages';
   document.getElementById('catalogTitle').textContent = gameName;
   document.getElementById('catalogSubtitle').textContent = 'Select a package to order';
   
-  // Load packages for this game
   renderPackages(gameId);
   
-  // Reset category chips
   const header = document.getElementById('packageCategoryHeader');
   if (header) {
     header.querySelectorAll('.package-category-chip').forEach((chip, index) => {
@@ -1191,16 +1397,13 @@ function showPackagesForGame(gameId, gameName) {
     });
   }
   
-  // Scroll to packages
   document.getElementById('packages').scrollIntoView({ behavior: 'smooth' });
 }
 
-// Back to games
 backToGamesBtn.addEventListener('click', function() {
   document.getElementById('gamesContainer').style.display = 'block';
   packagesSection.classList.remove('active');
   
-  // Reset header
   document.getElementById('catalogTag').textContent = 'Catalog';
   document.getElementById('catalogTitle').textContent = 'Free Fire';
   document.getElementById('catalogSubtitle').textContent = '';
@@ -1218,7 +1421,6 @@ let currentCategory = null;
 db.collection('packages').orderBy('order', 'asc').onSnapshot(snap => {
   packagesCache = [];
   snap.forEach(d => packagesCache.push({ id: d.id, ...d.data() }));
-  // Only render if packages section is active
   if (packagesSection.classList.contains('active')) {
     renderPackages(currentGameId);
   }
@@ -1229,10 +1431,8 @@ db.collection('packages').orderBy('order', 'asc').onSnapshot(snap => {
 
 function renderPackages(gameId) {
   if (!gameId) return;
-  // Filter packages by game
   let list = packagesCache.filter(p => p.gameId === gameId);
   
-  // Apply category filter if set
   if (currentCategory && currentCategory !== 'all') {
     list = list.filter(p => p.category === currentCategory);
   }
@@ -1254,7 +1454,6 @@ function renderPackages(gameId) {
     </div>
   `).join('');
   
-  // Add click event to package cards
   document.querySelectorAll('.package-clickable').forEach(card => {
     card.addEventListener('click', function() {
       const pkgId = this.dataset.packageId;
@@ -1268,7 +1467,6 @@ function renderPackages(gameId) {
   observeReveal();
 }
 
-// Filter packages by category
 function filterPackagesByCategory(category) {
   currentCategory = category;
   if (packagesSection.classList.contains('active') && currentGameId) {
@@ -1277,7 +1475,7 @@ function filterPackagesByCategory(category) {
 }
 
 // ============================================================
-// ORDER SYSTEM
+// ORDER SYSTEM WITH TELEGRAM INTEGRATION
 // ============================================================
 let selectedPackage = null;
 const orderModal = document.getElementById('orderModal');
@@ -1353,9 +1551,16 @@ document.getElementById('orderForm').addEventListener('submit', async e => {
       status: 'pending',
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     };
+    
     console.log('📦 Order data:', orderData);
-    await db.collection('orders').add(orderData);
-    showToast('✅ Order placed successfully! We will contact you soon.', 'success');
+    const orderRef = await db.collection('orders').add(orderData);
+    const newOrderId = orderRef.id;
+    
+    // Send to Telegram with order ID
+    const orderWithId = { ...orderData, id: newOrderId };
+    await sendOrderToTelegram(orderWithId);
+    
+    showToast('✅ Order placed successfully! Check Telegram for processing.', 'success');
     e.target.reset();
     orderModal.classList.remove('active');
     selectedPackage = null;
@@ -1374,6 +1579,8 @@ console.log('🚀 Flex TopUp initialized successfully!');
 console.log('📊 Firebase connected:', firebase.app().name);
 console.log('👤 Auth state listener active');
 console.log('📁 Current catalog mode:', currentCatalog);
+console.log('🤖 Telegram bot enabled:', TELEGRAM_BOT_ENABLED);
+console.log('📌 Telegram commands:', telegramCommands.length);
 </script>
 </body>
 </html>
