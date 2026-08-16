@@ -47,6 +47,7 @@ img{max-width:100%;}
 .btn-google:hover{border-color:var(--primary); transform:translateY(-2px);}
 .btn-danger{background:var(--danger); color:#fff;}
 .btn-outline-sm{background:transparent; border:1px solid var(--border); color:var(--text); padding:8px 14px; width:auto; font-size:.8rem;}
+.btn-success{background:var(--success); color:#fff;}
 .divider{display:flex; align-items:center; gap:12px; margin:20px 0; color:var(--text2); font-size:.8rem;}
 .divider::before, .divider::after{content:''; flex:1; height:1px; background:var(--border);}
 .error-msg{color:var(--danger); font-size:.85rem; margin-top:10px; min-height:18px;}
@@ -118,7 +119,7 @@ select.status-select{padding:6px 10px; border-radius:8px; border:1px solid var(-
 
 .modal{position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:2000; display:flex; align-items:center; justify-content:center; opacity:0; visibility:hidden; transition:var(--transition); padding:20px;}
 .modal.active{opacity:1; visibility:visible;}
-.modal-box{background:var(--card2); border-radius:var(--radius); padding:32px; max-width:500px; width:100%; transform:scale(.9); transition:var(--transition); border:1px solid var(--border); position:relative; max-height:90vh; overflow-y:auto;}
+.modal-box{background:var(--card2); border-radius:var(--radius); padding:32px; max-width:550px; width:100%; transform:scale(.9); transition:var(--transition); border:1px solid var(--border); position:relative; max-height:90vh; overflow-y:auto;}
 .modal.active .modal-box{transform:scale(1);}
 .modal-close{position:absolute; top:16px; right:16px; width:32px;height:32px; border-radius:50%; background:var(--bg2); border:none; cursor:pointer; color:var(--text);}
 .modal-box h3{margin-bottom:22px;}
@@ -190,6 +191,142 @@ select.status-select{padding:6px 10px; border-radius:8px; border:1px solid var(-
   width: auto;
   padding: 10px 16px;
 }
+
+/* Command list styling - UPDATED */
+.command-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.command-tag {
+  background: var(--bg2);
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  font-size: .8rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.command-tag .remove-cmd {
+  cursor: pointer;
+  color: var(--danger);
+  font-size: .8rem;
+}
+.command-input-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.command-input-row input {
+  flex: 1;
+  min-width: 100px;
+}
+.command-input-row select {
+  flex: 1;
+  min-width: 140px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text);
+  font-family: inherit;
+  font-size: .9rem;
+}
+.command-input-row button {
+  width: auto;
+  padding: 10px 16px;
+}
+.help-text {
+  color: var(--text2);
+  font-size: .8rem;
+  margin-top: 4px;
+}
+
+/* Package select dropdown in command section */
+.package-select-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 140px;
+}
+.package-select-wrapper select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text);
+  font-family: inherit;
+  font-size: .9rem;
+  appearance: none;
+  cursor: pointer;
+}
+.package-select-wrapper select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(124,92,255,.2);
+}
+.package-select-wrapper::after {
+  content: '\f107';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text2);
+  pointer-events: none;
+}
+
+/* Auto Status Keywords styling */
+.keyword-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.keyword-tag {
+  background: var(--bg2);
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  font-size: .8rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.keyword-tag .remove-keyword {
+  cursor: pointer;
+  color: var(--danger);
+  font-size: .8rem;
+}
+.keyword-input-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.keyword-input-row input {
+  flex: 1;
+  min-width: 120px;
+}
+.keyword-input-row select {
+  flex: 1;
+  min-width: 140px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text);
+  font-family: inherit;
+  font-size: .9rem;
+}
+.keyword-input-row button {
+  width: auto;
+  padding: 10px 16px;
+}
 </style>
 </head>
 <body>
@@ -222,6 +359,7 @@ select.status-select{padding:6px 10px; border-radius:8px; border:1px solid var(-
         <li><a data-panel="packages"><i class="fa-solid fa-box"></i> Packages</a></li>
         <li><a data-panel="orders"><i class="fa-solid fa-receipt"></i> Orders</a></li>
         <li><a data-panel="customers"><i class="fa-solid fa-users"></i> Customers</a></li>
+        <li><a data-panel="bot"><i class="fa-solid fa-robot"></i> Bot Manager</a></li>
       </ul>
       <div class="sidebar-footer">
         <div class="user-chip"><div class="user-avatar" id="userAvatar">A</div><div class="user-info"><div id="userName" style="font-size:.85rem;font-weight:600;">Admin</div><small id="userEmail">-</small></div></div>
@@ -317,9 +455,6 @@ select.status-select{padding:6px 10px; border-radius:8px; border:1px solid var(-
                 <input type="text" id="catLabelInput" placeholder="Label (e.g. WEEKLY MONTHLY)" style="flex:1;">
                 <button type="button" class="btn btn-primary" id="addCategoryBtn" style="width:auto; padding:10px 18px;">Add</button>
               </div>
-              <div style="margin-top:10px;">
-                <input type="hidden" id="packageCategories" value="">
-              </div>
             </div>
 
             <button type="submit" class="btn btn-primary" style="width:auto;padding:13px 30px;margin-top:10px;"><i class="fa-solid fa-floppy-disk"></i> Save All Settings</button>
@@ -352,6 +487,101 @@ select.status-select{padding:6px 10px; border-radius:8px; border:1px solid var(-
         <div class="card-box">
           <div class="section-toolbar"><h3><i class="fa-solid fa-users"></i> Registered Customers</h3></div>
           <div class="table-wrap"><table><thead><tr><th>Avatar</th><th>Name</th><th>Email</th><th>Joined</th><th>Orders</th><th>Total Spent</th></tr></thead><tbody id="customersTableBody"><tr class="empty-row"><td colspan="6">No customers yet</td></tr></tbody></table></div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- BOT MANAGER PANEL - NEW -->
+      <!-- ============================================================ -->
+      <section class="panel" id="panel-bot">
+        <div class="card-box">
+          <h3><i class="fa-solid fa-robot"></i> Bot Manager</h3>
+          <p style="color:var(--text2); margin-bottom:20px;">Configure the Telegram bot for automatic order notifications, processing commands, and auto status updates.</p>
+          
+          <form id="botSettingsForm">
+            <!-- Telegram Bot Basic Settings -->
+            <div class="settings-section">
+              <h4><i class="fa-brands fa-telegram"></i> Telegram Bot Settings</h4>
+              <p style="color:var(--text2); font-size:.85rem; margin-bottom:12px;">Configure the Telegram bot for automatic order notifications and processing.</p>
+              
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Bot Token (from @BotFather)</label>
+                  <input type="text" id="telegramBotToken" placeholder="123456789:ABCdefGHIjklMNOpqrsTUVwxyz">
+                  <small class="help-text">Create a bot with @BotFather and paste the token here</small>
+                </div>
+                <div class="form-group">
+                  <label>Chat/Group ID</label>
+                  <input type="text" id="telegramChatId" placeholder="-1001234567890">
+                  <small class="help-text">Use @getidsbot to find your group ID</small>
+                </div>
+              </div>
+              
+              <div class="checkbox-row" style="margin-top:8px;">
+                <input type="checkbox" id="telegramEnabled">
+                <label for="telegramEnabled">Enable Telegram Bot System</label>
+              </div>
+            </div>
+
+            <!-- Package Commands - UPDATED with amount field -->
+            <div class="settings-section">
+              <h4><i class="fa-solid fa-terminal"></i> Package Commands</h4>
+              <p style="color:var(--text2); font-size:.85rem; margin-bottom:8px;">Add commands that trigger auto top-up for specific packages. Format: <code>atp [UID] [amount]</code></p>
+              <div class="command-list" id="commandList"></div>
+              <div class="command-input-row">
+                <input type="text" id="cmdInput" placeholder="Command (e.g. atp)" style="flex:0 0 120px;">
+                <div class="package-select-wrapper" style="flex:1; min-width:140px;">
+                  <select id="pkgSelect">
+                    <option value="">-- Select Package --</option>
+                  </select>
+                </div>
+                <input type="text" id="cmdAmountInput" placeholder="Amount (e.g. 80)" style="flex:0 0 100px;">
+                <button type="button" class="btn btn-primary" id="addCommandBtn" style="width:auto; padding:10px 18px;">Add</button>
+              </div>
+              <small class="help-text">Example: Command "atp" with Package "115 Diamond" and Amount "80" → sends "atp [UID] 80"</small>
+            </div>
+
+            <!-- Auto Status Update Keywords -->
+            <div class="settings-section">
+              <h4><i class="fa-solid fa-arrows-rotate"></i> Auto Status Update</h4>
+              <p style="color:var(--text2); font-size:.85rem; margin-bottom:8px;">Monitor Telegram messages for keywords and automatically update order status when detected.</p>
+              
+              <div class="checkbox-row" style="margin-bottom:12px;">
+                <input type="checkbox" id="autoStatusEnabled">
+                <label for="autoStatusEnabled">Enable Auto Status Update</label>
+              </div>
+
+              <div class="keyword-list" id="keywordList"></div>
+              <div class="keyword-input-row">
+                <input type="text" id="keywordInput" placeholder="Keyword (e.g. done, success, completed)" style="flex:1; min-width:120px;">
+                <select id="keywordStatusSelect">
+                  <option value="completed">Completed</option>
+                  <option value="processing">Processing</option>
+                  <option value="pending">Pending</option>
+                  <option value="cancelled">Cancelled</option>
+                </select>
+                <button type="button" class="btn btn-primary" id="addKeywordBtn" style="width:auto; padding:10px 18px;">Add</button>
+              </div>
+              <small class="help-text">When a message contains any of these keywords, the matching order will be updated to the selected status.</small>
+            </div>
+
+            <!-- Custom Messages -->
+            <div class="settings-section">
+              <h4><i class="fa-solid fa-message"></i> Custom Messages</h4>
+              <div class="form-group">
+                <label>Success Message (shown on completion)</label>
+                <input type="text" id="telegramSuccessMessage" placeholder="✅ Sᴜᴄᴄᴇss">
+                <small class="help-text">Example: ✅ Sᴜᴄᴄᴇss</small>
+              </div>
+              <div class="form-group">
+                <label>Done Message (header on completion)</label>
+                <input type="text" id="telegramDoneMessage" placeholder="💎 Dɪᴀᴍᴏɴᴅ Tᴏᴘ-Uᴘ Dᴏɴᴇ ! !">
+                <small class="help-text">Example: 💎 Dɪᴀᴍᴏɴᴅ Tᴏᴘ-Uᴘ Dᴏɴᴇ ! !</small>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width:auto;padding:13px 30px;margin-top:10px;"><i class="fa-solid fa-floppy-disk"></i> Save Bot Settings</button>
+          </form>
         </div>
       </section>
     </main>
@@ -482,7 +712,7 @@ function grantAccess(user){
   document.getElementById('userName').textContent = user.displayName || 'Admin';
   document.getElementById('userEmail').textContent = user.email || '';
   document.getElementById('userAvatar').textContent = (user.email||'A').charAt(0).toUpperCase();
-  initSettings(); initGames(); initPackages(); initOrders(); initCustomers();
+  initSettings(); initGames(); initPackages(); initOrders(); initCustomers(); initBotSettings();
 }
 
 document.querySelectorAll('.side-nav a').forEach(link=>{
@@ -549,7 +779,9 @@ document.getElementById('logoUrl').addEventListener('input', e=>{
   if(e.target.value){ preview.src = e.target.value; preview.style.display='block'; } else preview.style.display='none';
 });
 
-// Category management
+// ============================================================
+// CATEGORY MANAGEMENT
+// ============================================================
 function renderCategoryList() {
   const container = document.getElementById('categoryList');
   if (categoryData.length === 0) {
@@ -577,7 +809,6 @@ document.getElementById('addCategoryBtn').addEventListener('click', function() {
   const id = idInput.value.trim();
   const label = labelInput.value.trim();
   if (!id || !label) { showToast('Please fill both ID and Label.', 'error'); return; }
-  // Check duplicate id
   if (categoryData.some(c => c.id === id)) { showToast('Category ID must be unique.', 'error'); return; }
   categoryData.push({ id, label });
   renderCategoryList();
@@ -586,7 +817,9 @@ document.getElementById('addCategoryBtn').addEventListener('click', function() {
   showToast('Category added.', 'success');
 });
 
-// Settings form submit
+// ============================================================
+// SETTINGS FORM SUBMIT
+// ============================================================
 document.getElementById('settingsForm').addEventListener('submit', async e=>{
   e.preventDefault();
   const data = {
@@ -685,6 +918,7 @@ function initPackages(){
     packagesCache = []; snap.forEach(d=> packagesCache.push({id:d.id, ...d.data()}));
     renderPackagesTable();
     document.getElementById('statPackages').textContent = packagesCache.length;
+    populatePackageSelect();
   });
 }
 function populatePackageGameSelect(){
@@ -825,6 +1059,192 @@ function renderCustomersTable(){
     </tr>`;
   }).join('');
 }
+
+// ============================================================
+// BOT MANAGER - NEW
+// ============================================================
+let commandData = [];
+let keywordData = [];
+let packagesForSelect = [];
+
+function initBotSettings() {
+  // Listen for package changes to update the select dropdown
+  db.collection('packages').orderBy('title','asc').onSnapshot(snap=>{
+    packagesForSelect = [];
+    snap.forEach(d=> packagesForSelect.push({id: d.id, ...d.data()}));
+    populatePackageSelect();
+  });
+
+  db.collection('config').doc('bot').onSnapshot(doc=>{
+    const d = doc.exists ? doc.data() : {};
+    
+    // Telegram Bot Settings
+    document.getElementById('telegramBotToken').value = d.telegramBotToken || '';
+    document.getElementById('telegramChatId').value = d.telegramChatId || '';
+    document.getElementById('telegramEnabled').checked = d.telegramEnabled || false;
+    document.getElementById('telegramSuccessMessage').value = d.telegramSuccessMessage || '✅ Sᴜᴄᴄᴇss';
+    document.getElementById('telegramDoneMessage').value = d.telegramDoneMessage || '💎 Dɪᴀᴍᴏɴᴅ Tᴏᴘ-Uᴘ Dᴏɴᴇ ! !';
+    
+    // Commands - New structure: { command: 'atp', packageName: '115 Diamond', amount: '80' }
+    commandData = d.telegramCommands || [];
+    renderCommandList();
+    
+    // Auto Status Keywords
+    document.getElementById('autoStatusEnabled').checked = d.autoStatusEnabled || false;
+    keywordData = d.statusKeywords || [];
+    renderKeywordList();
+  });
+}
+
+// ============================================================
+// POPULATE PACKAGE SELECT DROPDOWN
+// ============================================================
+function populatePackageSelect() {
+  const select = document.getElementById('pkgSelect');
+  const currentValue = select.value;
+  select.innerHTML = '<option value="">-- Select Package --</option>';
+  
+  const uniquePackages = [];
+  const seenTitles = new Set();
+  packagesForSelect.forEach(p => {
+    if (p.title && !seenTitles.has(p.title)) {
+      seenTitles.add(p.title);
+      uniquePackages.push(p);
+    }
+  });
+  
+  uniquePackages.sort((a, b) => a.title.localeCompare(b.title));
+  uniquePackages.forEach(p => {
+    const option = document.createElement('option');
+    option.value = p.title;
+    option.textContent = p.title + (p.gameName ? ` (${p.gameName})` : '');
+    select.appendChild(option);
+  });
+  
+  if (currentValue && [...select.options].some(opt => opt.value === currentValue)) {
+    select.value = currentValue;
+  }
+}
+
+// ============================================================
+// COMMAND MANAGEMENT - UPDATED with amount field
+// ============================================================
+function renderCommandList() {
+  const container = document.getElementById('commandList');
+  if (commandData.length === 0) {
+    container.innerHTML = '<span style="color:var(--text2); font-size:.85rem;">No commands added yet.</span>';
+  } else {
+    container.innerHTML = commandData.map((cmd, idx) => `
+      <span class="command-tag">
+        <span><code>${cmd.command} ${cmd.amount}</code> → ${cmd.packageName}</span>
+        <span class="remove-cmd" data-index="${idx}"><i class="fa-solid fa-times"></i></span>
+      </span>
+    `).join('');
+    container.querySelectorAll('.remove-cmd').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const idx = parseInt(this.dataset.index);
+        commandData.splice(idx, 1);
+        renderCommandList();
+      });
+    });
+  }
+}
+
+document.getElementById('addCommandBtn').addEventListener('click', function() {
+  const cmdInput = document.getElementById('cmdInput');
+  const pkgSelect = document.getElementById('pkgSelect');
+  const amountInput = document.getElementById('cmdAmountInput');
+  
+  const command = cmdInput.value.trim();
+  const packageName = pkgSelect.value;
+  const amount = amountInput.value.trim();
+  
+  if (!command) { showToast('Please enter a command name (e.g. atp).', 'error'); cmdInput.focus(); return; }
+  if (!packageName) { showToast('Please select a package from the dropdown.', 'error'); pkgSelect.focus(); return; }
+  if (!amount) { showToast('Please enter an amount (e.g. 80).', 'error'); amountInput.focus(); return; }
+  if (!/^\d+$/.test(amount)) { showToast('Amount must be a number.', 'error'); amountInput.focus(); return; }
+  
+  // Check if command already exists for this package
+  if (commandData.some(c => c.command.toLowerCase() === command.toLowerCase() && c.packageName === packageName)) { 
+    showToast('This command already exists for this package.', 'error'); 
+    return; 
+  }
+  
+  commandData.push({ command, packageName, amount });
+  renderCommandList();
+  cmdInput.value = '';
+  pkgSelect.value = '';
+  amountInput.value = '';
+  showToast(`Command "${command} ${amount}" added for "${packageName}".`, 'success');
+});
+
+// ============================================================
+// KEYWORD MANAGEMENT
+// ============================================================
+function renderKeywordList() {
+  const container = document.getElementById('keywordList');
+  if (keywordData.length === 0) {
+    container.innerHTML = '<span style="color:var(--text2); font-size:.85rem;">No keywords added yet.</span>';
+  } else {
+    container.innerHTML = keywordData.map((kw, idx) => `
+      <span class="keyword-tag">
+        <span>"${kw.keyword}" → ${kw.status}</span>
+        <span class="remove-keyword" data-index="${idx}"><i class="fa-solid fa-times"></i></span>
+      </span>
+    `).join('');
+    container.querySelectorAll('.remove-keyword').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const idx = parseInt(this.dataset.index);
+        keywordData.splice(idx, 1);
+        renderKeywordList();
+      });
+    });
+  }
+}
+
+document.getElementById('addKeywordBtn').addEventListener('click', function() {
+  const keywordInput = document.getElementById('keywordInput');
+  const statusSelect = document.getElementById('keywordStatusSelect');
+  
+  const keyword = keywordInput.value.trim().toLowerCase();
+  const status = statusSelect.value;
+  
+  if (!keyword) { showToast('Please enter a keyword.', 'error'); keywordInput.focus(); return; }
+  if (keywordData.some(k => k.keyword === keyword)) { 
+    showToast('This keyword already exists.', 'error'); 
+    return; 
+  }
+  
+  keywordData.push({ keyword, status });
+  renderKeywordList();
+  keywordInput.value = '';
+  showToast(`Keyword "${keyword}" → ${status} added.`, 'success');
+});
+
+// ============================================================
+// BOT SETTINGS FORM SUBMIT
+// ============================================================
+document.getElementById('botSettingsForm').addEventListener('submit', async e=>{
+  e.preventDefault();
+  
+  const data = {
+    telegramBotToken: document.getElementById('telegramBotToken').value,
+    telegramChatId: document.getElementById('telegramChatId').value,
+    telegramEnabled: document.getElementById('telegramEnabled').checked,
+    telegramSuccessMessage: document.getElementById('telegramSuccessMessage').value,
+    telegramDoneMessage: document.getElementById('telegramDoneMessage').value,
+    telegramCommands: commandData,
+    autoStatusEnabled: document.getElementById('autoStatusEnabled').checked,
+    statusKeywords: keywordData,
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+  };
+  
+  try{
+    await db.collection('config').doc('bot').set(data, {merge:true});
+    showToast('Bot settings saved successfully!', 'success');
+  }catch(err){ showToast('Failed to save bot settings.', 'error'); console.error(err); }
+});
+
 </script>
 </body>
 </html>
