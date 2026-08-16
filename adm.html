@@ -138,7 +138,6 @@ select.status-select{padding:6px 10px; border-radius:8px; border:1px solid var(-
   #sideHamburger{display:block;}
 }
 
-/* extra fields styling */
 .settings-section {
   margin-bottom: 24px;
   border-top: 1px solid var(--border);
@@ -192,7 +191,6 @@ select.status-select{padding:6px 10px; border-radius:8px; border:1px solid var(-
   padding: 10px 16px;
 }
 
-/* Command list styling - UPDATED */
 .command-list {
   display: flex;
   flex-wrap: wrap;
@@ -245,7 +243,6 @@ select.status-select{padding:6px 10px; border-radius:8px; border:1px solid var(-
   margin-top: 4px;
 }
 
-/* Package select dropdown in command section */
 .package-select-wrapper {
   position: relative;
   flex: 1;
@@ -280,7 +277,6 @@ select.status-select{padding:6px 10px; border-radius:8px; border:1px solid var(-
   pointer-events: none;
 }
 
-/* Auto Status Keywords styling */
 .keyword-list {
   display: flex;
   flex-wrap: wrap;
@@ -392,7 +388,6 @@ select.status-select{padding:6px 10px; border-radius:8px; border:1px solid var(-
         <div class="card-box">
           <h3><i class="fa-solid fa-gear"></i> Site Settings</h3>
           <form id="settingsForm">
-            <!-- Basic Settings -->
             <div class="form-row">
               <div class="form-group"><label>Site Name</label><input type="text" id="siteName" placeholder="GameVault"></div>
               <div class="form-group"><label>Logo URL (embedded link)</label><input type="url" id="logoUrl" placeholder="https://example.com/logo.png">
@@ -403,7 +398,6 @@ select.status-select{padding:6px 10px; border-radius:8px; border:1px solid var(-
             <div class="form-group"><label>Hero Title</label><input type="text" id="heroTitle" placeholder="Level Up Your Game"></div>
             <div class="form-group"><label>Hero Subtitle</label><textarea id="heroSubtitle" rows="2" placeholder="Premium in-game items..."></textarea></div>
 
-            <!-- Catalog Settings -->
             <div class="settings-section">
               <h4><i class="fa-solid fa-layer-group"></i> Catalog Settings</h4>
               <div class="form-row">
@@ -414,7 +408,6 @@ select.status-select{padding:6px 10px; border-radius:8px; border:1px solid var(-
               <div class="form-group"><label>Catalog Type (e.g. "games", "subscriptions")</label><input type="text" id="catalogType" placeholder="games"></div>
             </div>
 
-            <!-- Font Settings -->
             <div class="settings-section">
               <h4><i class="fa-solid fa-font"></i> Font Settings</h4>
               <div class="form-row">
@@ -423,7 +416,6 @@ select.status-select{padding:6px 10px; border-radius:8px; border:1px solid var(-
               </div>
             </div>
 
-            <!-- Social Links (Footer) -->
             <div class="settings-section">
               <h4><i class="fa-solid fa-share-alt"></i> Social Links (Footer)</h4>
               <div class="form-row">
@@ -436,7 +428,6 @@ select.status-select{padding:6px 10px; border-radius:8px; border:1px solid var(-
               </div>
             </div>
 
-            <!-- Support Links (FAB) -->
             <div class="settings-section">
               <h4><i class="fa-solid fa-headset"></i> Support Links (Floating Button)</h4>
               <div class="form-row">
@@ -445,7 +436,6 @@ select.status-select{padding:6px 10px; border-radius:8px; border:1px solid var(-
               </div>
             </div>
 
-            <!-- Package Categories -->
             <div class="settings-section">
               <h4><i class="fa-solid fa-tags"></i> Package Categories</h4>
               <p style="color:var(--text2); font-size:.85rem; margin-bottom:12px;">Add categories to filter packages (e.g., "UID TOP UP (BD)", "WEEKLY MONTHLY"). Each category needs an ID and label.</p>
@@ -490,30 +480,24 @@ select.status-select{padding:6px 10px; border-radius:8px; border:1px solid var(-
         </div>
       </section>
 
-      <!-- ============================================================ -->
-      <!-- BOT MANAGER PANEL - NEW -->
-      <!-- ============================================================ -->
+      <!-- BOT MANAGER PANEL -->
       <section class="panel" id="panel-bot">
         <div class="card-box">
           <h3><i class="fa-solid fa-robot"></i> Bot Manager</h3>
           <p style="color:var(--text2); margin-bottom:20px;">Configure the Telegram bot for automatic order notifications, processing commands, and auto status updates.</p>
           
           <form id="botSettingsForm">
-            <!-- Telegram Bot Basic Settings -->
             <div class="settings-section">
               <h4><i class="fa-brands fa-telegram"></i> Telegram Bot Settings</h4>
-              <p style="color:var(--text2); font-size:.85rem; margin-bottom:12px;">Configure the Telegram bot for automatic order notifications and processing.</p>
               
               <div class="form-row">
                 <div class="form-group">
                   <label>Bot Token (from @BotFather)</label>
                   <input type="text" id="telegramBotToken" placeholder="123456789:ABCdefGHIjklMNOpqrsTUVwxyz">
-                  <small class="help-text">Create a bot with @BotFather and paste the token here</small>
                 </div>
                 <div class="form-group">
                   <label>Chat/Group ID</label>
                   <input type="text" id="telegramChatId" placeholder="-1001234567890">
-                  <small class="help-text">Use @getidsbot to find your group ID</small>
                 </div>
               </div>
               
@@ -523,10 +507,10 @@ select.status-select{padding:6px 10px; border-radius:8px; border:1px solid var(-
               </div>
             </div>
 
-            <!-- Package Commands - UPDATED with amount field -->
+            <!-- Package Commands -->
             <div class="settings-section">
               <h4><i class="fa-solid fa-terminal"></i> Package Commands</h4>
-              <p style="color:var(--text2); font-size:.85rem; margin-bottom:8px;">Add commands that trigger auto top-up for specific packages. Format: <code>atp [UID] [amount]</code></p>
+              <p style="color:var(--text2); font-size:.85rem; margin-bottom:8px;">Format: <code>atp [UID] [amount]</code> - Example: "atp" with amount "80" sends "atp 1234567890 80"</p>
               <div class="command-list" id="commandList"></div>
               <div class="command-input-row">
                 <input type="text" id="cmdInput" placeholder="Command (e.g. atp)" style="flex:0 0 120px;">
@@ -538,13 +522,13 @@ select.status-select{padding:6px 10px; border-radius:8px; border:1px solid var(-
                 <input type="text" id="cmdAmountInput" placeholder="Amount (e.g. 80)" style="flex:0 0 100px;">
                 <button type="button" class="btn btn-primary" id="addCommandBtn" style="width:auto; padding:10px 18px;">Add</button>
               </div>
-              <small class="help-text">Example: Command "atp" with Package "115 Diamond" and Amount "80" → sends "atp [UID] 80"</small>
+              <small class="help-text">The command with the matching amount will be sent when an order is placed.</small>
             </div>
 
-            <!-- Auto Status Update Keywords -->
+            <!-- Auto Status Keywords -->
             <div class="settings-section">
               <h4><i class="fa-solid fa-arrows-rotate"></i> Auto Status Update</h4>
-              <p style="color:var(--text2); font-size:.85rem; margin-bottom:8px;">Monitor Telegram messages for keywords and automatically update order status when detected.</p>
+              <p style="color:var(--text2); font-size:.85rem; margin-bottom:8px;">When a message contains a keyword, update the matching order's status.</p>
               
               <div class="checkbox-row" style="margin-bottom:12px;">
                 <input type="checkbox" id="autoStatusEnabled">
@@ -553,7 +537,7 @@ select.status-select{padding:6px 10px; border-radius:8px; border:1px solid var(-
 
               <div class="keyword-list" id="keywordList"></div>
               <div class="keyword-input-row">
-                <input type="text" id="keywordInput" placeholder="Keyword (e.g. done, success, completed)" style="flex:1; min-width:120px;">
+                <input type="text" id="keywordInput" placeholder="Keyword (e.g. done, success)" style="flex:1; min-width:120px;">
                 <select id="keywordStatusSelect">
                   <option value="completed">Completed</option>
                   <option value="processing">Processing</option>
@@ -562,7 +546,6 @@ select.status-select{padding:6px 10px; border-radius:8px; border:1px solid var(-
                 </select>
                 <button type="button" class="btn btn-primary" id="addKeywordBtn" style="width:auto; padding:10px 18px;">Add</button>
               </div>
-              <small class="help-text">When a message contains any of these keywords, the matching order will be updated to the selected status.</small>
             </div>
 
             <!-- Custom Messages -->
@@ -571,12 +554,10 @@ select.status-select{padding:6px 10px; border-radius:8px; border:1px solid var(-
               <div class="form-group">
                 <label>Success Message (shown on completion)</label>
                 <input type="text" id="telegramSuccessMessage" placeholder="✅ Sᴜᴄᴄᴇss">
-                <small class="help-text">Example: ✅ Sᴜᴄᴄᴇss</small>
               </div>
               <div class="form-group">
                 <label>Done Message (header on completion)</label>
                 <input type="text" id="telegramDoneMessage" placeholder="💎 Dɪᴀᴍᴏɴᴅ Tᴏᴘ-Uᴘ Dᴏɴᴇ ! !">
-                <small class="help-text">Example: 💎 Dɪᴀᴍᴏɴᴅ Tᴏᴘ-Uᴘ Dᴏɴᴇ ! !</small>
               </div>
             </div>
 
@@ -702,7 +683,7 @@ async function checkAdminAccess(user){
     }
     const doc = await db.collection('admins').doc(user.uid).get();
     if(doc.exists) grantAccess(user);
-    else{ showToast('Access denied. Your account is not authorized.', 'error'); await auth.signOut(); }
+    else{ showToast('Access denied.', 'error'); await auth.signOut(); }
   }catch(err){ console.error(err); showToast('Error verifying access.', 'error'); }
 }
 
@@ -738,34 +719,27 @@ let categoryData = [];
 function initSettings(){
   db.collection('config').doc('site').onSnapshot(doc=>{
     const d = doc.exists ? doc.data() : {};
-    // Basic
     document.getElementById('siteName').value = d.siteName || '';
     document.getElementById('logoUrl').value = d.logoUrl || '';
     document.getElementById('tagline').value = d.tagline || '';
     document.getElementById('heroTitle').value = d.heroTitle || '';
     document.getElementById('heroSubtitle').value = d.heroSubtitle || '';
     document.getElementById('sbSiteName').textContent = d.siteName || 'GameVault';
-    // Catalog
     document.getElementById('catalogTag').value = d.catalogTag || '';
     document.getElementById('catalogTitle').value = d.catalogTitle || '';
     document.getElementById('catalogSubtitle').value = d.catalogSubtitle || '';
     document.getElementById('catalogType').value = d.catalogType || '';
-    // Fonts
     document.getElementById('fontFamily').value = d.fontFamily || '';
     document.getElementById('headingFont').value = d.headingFont || '';
-    // Social
     document.getElementById('fbLink').value = d.fbLink || '';
     document.getElementById('igLink').value = d.igLink || '';
     document.getElementById('xLink').value = d.xLink || '';
     document.getElementById('discordLink').value = d.discordLink || '';
-    // Support
     document.getElementById('telegramLink').value = d.telegramLink || '';
     document.getElementById('whatsappLink').value = d.whatsappLink || '';
-    // Categories
     categoryData = d.packageCategories || [];
     renderCategoryList();
 
-    // Logo preview
     const preview = document.getElementById('logoPreview');
     const sbLogo = document.getElementById('sbLogo');
     const sbFallback = document.getElementById('sbLogoFallback');
@@ -774,14 +748,6 @@ function initSettings(){
   });
 }
 
-document.getElementById('logoUrl').addEventListener('input', e=>{
-  const preview = document.getElementById('logoPreview');
-  if(e.target.value){ preview.src = e.target.value; preview.style.display='block'; } else preview.style.display='none';
-});
-
-// ============================================================
-// CATEGORY MANAGEMENT
-// ============================================================
 function renderCategoryList() {
   const container = document.getElementById('categoryList');
   if (categoryData.length === 0) {
@@ -804,22 +770,17 @@ function renderCategoryList() {
 }
 
 document.getElementById('addCategoryBtn').addEventListener('click', function() {
-  const idInput = document.getElementById('catIdInput');
-  const labelInput = document.getElementById('catLabelInput');
-  const id = idInput.value.trim();
-  const label = labelInput.value.trim();
+  const id = document.getElementById('catIdInput').value.trim();
+  const label = document.getElementById('catLabelInput').value.trim();
   if (!id || !label) { showToast('Please fill both ID and Label.', 'error'); return; }
   if (categoryData.some(c => c.id === id)) { showToast('Category ID must be unique.', 'error'); return; }
   categoryData.push({ id, label });
   renderCategoryList();
-  idInput.value = '';
-  labelInput.value = '';
+  document.getElementById('catIdInput').value = '';
+  document.getElementById('catLabelInput').value = '';
   showToast('Category added.', 'success');
 });
 
-// ============================================================
-// SETTINGS FORM SUBMIT
-// ============================================================
 document.getElementById('settingsForm').addEventListener('submit', async e=>{
   e.preventDefault();
   const data = {
@@ -845,7 +806,7 @@ document.getElementById('settingsForm').addEventListener('submit', async e=>{
   };
   try{
     await db.collection('config').doc('site').set(data, {merge:true});
-    showToast('All settings saved successfully!', 'success');
+    showToast('All settings saved!', 'success');
   }catch(err){ showToast('Failed to save settings.', 'error'); console.error(err); }
 });
 
@@ -907,7 +868,7 @@ document.getElementById('gameForm').addEventListener('submit', async e=>{
   try{
     if(id) await db.collection('games').doc(id).update(data);
     else await db.collection('games').add(data);
-    showToast('Game saved successfully!', 'success'); closeModal('gameModal');
+    showToast('Game saved!', 'success'); closeModal('gameModal');
   }catch(err){ showToast('Failed to save game.', 'error'); console.error(err); }
 });
 
@@ -987,7 +948,7 @@ document.getElementById('packageForm').addEventListener('submit', async e=>{
   try{
     if(id) await db.collection('packages').doc(id).update(data);
     else await db.collection('packages').add(data);
-    showToast('Package saved successfully!', 'success'); closeModal('packageModal');
+    showToast('Package saved!', 'success'); closeModal('packageModal');
   }catch(err){ showToast('Failed to save package.', 'error'); console.error(err); }
 });
 
@@ -1061,14 +1022,13 @@ function renderCustomersTable(){
 }
 
 // ============================================================
-// BOT MANAGER - NEW
+// BOT MANAGER
 // ============================================================
 let commandData = [];
 let keywordData = [];
 let packagesForSelect = [];
 
 function initBotSettings() {
-  // Listen for package changes to update the select dropdown
   db.collection('packages').orderBy('title','asc').onSnapshot(snap=>{
     packagesForSelect = [];
     snap.forEach(d=> packagesForSelect.push({id: d.id, ...d.data()}));
@@ -1078,27 +1038,22 @@ function initBotSettings() {
   db.collection('config').doc('bot').onSnapshot(doc=>{
     const d = doc.exists ? doc.data() : {};
     
-    // Telegram Bot Settings
     document.getElementById('telegramBotToken').value = d.telegramBotToken || '';
     document.getElementById('telegramChatId').value = d.telegramChatId || '';
     document.getElementById('telegramEnabled').checked = d.telegramEnabled || false;
     document.getElementById('telegramSuccessMessage').value = d.telegramSuccessMessage || '✅ Sᴜᴄᴄᴇss';
     document.getElementById('telegramDoneMessage').value = d.telegramDoneMessage || '💎 Dɪᴀᴍᴏɴᴅ Tᴏᴘ-Uᴘ Dᴏɴᴇ ! !';
     
-    // Commands - New structure: { command: 'atp', packageName: '115 Diamond', amount: '80' }
+    // Load commands - each has: { command: 'atp', packageName: '115 Diamond', amount: '80' }
     commandData = d.telegramCommands || [];
     renderCommandList();
     
-    // Auto Status Keywords
     document.getElementById('autoStatusEnabled').checked = d.autoStatusEnabled || false;
     keywordData = d.statusKeywords || [];
     renderKeywordList();
   });
 }
 
-// ============================================================
-// POPULATE PACKAGE SELECT DROPDOWN
-// ============================================================
 function populatePackageSelect() {
   const select = document.getElementById('pkgSelect');
   const currentValue = select.value;
@@ -1126,9 +1081,6 @@ function populatePackageSelect() {
   }
 }
 
-// ============================================================
-// COMMAND MANAGEMENT - UPDATED with amount field
-// ============================================================
 function renderCommandList() {
   const container = document.getElementById('commandList');
   if (commandData.length === 0) {
@@ -1136,7 +1088,7 @@ function renderCommandList() {
   } else {
     container.innerHTML = commandData.map((cmd, idx) => `
       <span class="command-tag">
-        <span><code>${cmd.command} ${cmd.amount}</code> → ${cmd.packageName}</span>
+        <span><strong>${cmd.command}</strong> ${cmd.amount} → ${cmd.packageName}</span>
         <span class="remove-cmd" data-index="${idx}"><i class="fa-solid fa-times"></i></span>
       </span>
     `).join('');
@@ -1151,36 +1103,27 @@ function renderCommandList() {
 }
 
 document.getElementById('addCommandBtn').addEventListener('click', function() {
-  const cmdInput = document.getElementById('cmdInput');
-  const pkgSelect = document.getElementById('pkgSelect');
-  const amountInput = document.getElementById('cmdAmountInput');
+  const command = document.getElementById('cmdInput').value.trim();
+  const packageName = document.getElementById('pkgSelect').value;
+  const amount = document.getElementById('cmdAmountInput').value.trim();
   
-  const command = cmdInput.value.trim();
-  const packageName = pkgSelect.value;
-  const amount = amountInput.value.trim();
+  if (!command) { showToast('Enter a command name.', 'error'); return; }
+  if (!packageName) { showToast('Select a package.', 'error'); return; }
+  if (!amount || !/^\d+$/.test(amount)) { showToast('Enter a valid amount.', 'error'); return; }
   
-  if (!command) { showToast('Please enter a command name (e.g. atp).', 'error'); cmdInput.focus(); return; }
-  if (!packageName) { showToast('Please select a package from the dropdown.', 'error'); pkgSelect.focus(); return; }
-  if (!amount) { showToast('Please enter an amount (e.g. 80).', 'error'); amountInput.focus(); return; }
-  if (!/^\d+$/.test(amount)) { showToast('Amount must be a number.', 'error'); amountInput.focus(); return; }
-  
-  // Check if command already exists for this package
-  if (commandData.some(c => c.command.toLowerCase() === command.toLowerCase() && c.packageName === packageName)) { 
-    showToast('This command already exists for this package.', 'error'); 
+  if (commandData.some(c => c.command === command && c.packageName === packageName)) { 
+    showToast('Command already exists for this package.', 'error'); 
     return; 
   }
   
   commandData.push({ command, packageName, amount });
   renderCommandList();
-  cmdInput.value = '';
-  pkgSelect.value = '';
-  amountInput.value = '';
-  showToast(`Command "${command} ${amount}" added for "${packageName}".`, 'success');
+  document.getElementById('cmdInput').value = '';
+  document.getElementById('pkgSelect').value = '';
+  document.getElementById('cmdAmountInput').value = '';
+  showToast(`Command "${command} ${amount}" added.`, 'success');
 });
 
-// ============================================================
-// KEYWORD MANAGEMENT
-// ============================================================
 function renderKeywordList() {
   const container = document.getElementById('keywordList');
   if (keywordData.length === 0) {
@@ -1203,27 +1146,18 @@ function renderKeywordList() {
 }
 
 document.getElementById('addKeywordBtn').addEventListener('click', function() {
-  const keywordInput = document.getElementById('keywordInput');
-  const statusSelect = document.getElementById('keywordStatusSelect');
+  const keyword = document.getElementById('keywordInput').value.trim().toLowerCase();
+  const status = document.getElementById('keywordStatusSelect').value;
   
-  const keyword = keywordInput.value.trim().toLowerCase();
-  const status = statusSelect.value;
-  
-  if (!keyword) { showToast('Please enter a keyword.', 'error'); keywordInput.focus(); return; }
-  if (keywordData.some(k => k.keyword === keyword)) { 
-    showToast('This keyword already exists.', 'error'); 
-    return; 
-  }
+  if (!keyword) { showToast('Enter a keyword.', 'error'); return; }
+  if (keywordData.some(k => k.keyword === keyword)) { showToast('Keyword already exists.', 'error'); return; }
   
   keywordData.push({ keyword, status });
   renderKeywordList();
-  keywordInput.value = '';
+  document.getElementById('keywordInput').value = '';
   showToast(`Keyword "${keyword}" → ${status} added.`, 'success');
 });
 
-// ============================================================
-// BOT SETTINGS FORM SUBMIT
-// ============================================================
 document.getElementById('botSettingsForm').addEventListener('submit', async e=>{
   e.preventDefault();
   
@@ -1241,10 +1175,9 @@ document.getElementById('botSettingsForm').addEventListener('submit', async e=>{
   
   try{
     await db.collection('config').doc('bot').set(data, {merge:true});
-    showToast('Bot settings saved successfully!', 'success');
+    showToast('Bot settings saved!', 'success');
   }catch(err){ showToast('Failed to save bot settings.', 'error'); console.error(err); }
 });
-
 </script>
 </body>
 </html>
