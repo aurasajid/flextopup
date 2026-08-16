@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    :root { --radius:16px; --transition: all .3s cubic-bezier(.4,0,.2,1); }
+    :root { --radius:12px; --transition: all .3s cubic-bezier(.4,0,.2,1); --font-family:'Poppins',sans-serif; }
     [data-theme="dark"] {
       --bg:#0b0b18; --bg2:#12122a; --card:#161634; --card2:#1c1c40;
       --text:#eef0ff; --text2:#a3a3c9; --border:rgba(255,255,255,.08);
@@ -25,7 +25,7 @@
       --shadow: 0 10px 30px rgba(90,90,150,.15); --glass: rgba(255,255,255,.75);
       --success:#22b566; --danger:#e63e5c; --warn:#e6952f;
     }
-    body { font-family:'Poppins',sans-serif; background:var(--bg); color:var(--text); transition: background .4s ease, color .4s ease; overflow-x:hidden; }
+    body { font-family:var(--font-family); background:var(--bg); color:var(--text); transition: background .4s ease, color .4s ease, font-family .3s ease; overflow-x:hidden; }
     h1,h2,h3,h4 { font-family:'Orbitron',sans-serif; letter-spacing:.5px; }
     a { text-decoration:none; color:inherit; }
     img { max-width:100%; display:block; }
@@ -36,7 +36,7 @@
     .loader-ring { width:60px; height:60px; border:5px solid var(--border); border-top-color:var(--primary); border-radius:50%; animation:spin 1s linear infinite; }
     @keyframes spin { to { transform:rotate(360deg); } }
     #preloader.hide { opacity:0; visibility:hidden; }
-    .btn { display:inline-flex; align-items:center; gap:8px; padding:13px 28px; border:none; border-radius:50px; font-weight:600; font-size:.95rem; cursor:pointer; transition:var(--transition); white-space:nowrap; }
+    .btn { display:inline-flex; align-items:center; gap:8px; padding:13px 28px; border:none; border-radius:50px; font-weight:600; font-size:.95rem; cursor:pointer; transition:var(--transition); white-space:nowrap; font-family:var(--font-family); }
     .btn-primary { background:linear-gradient(135deg,var(--primary),var(--primary2)); color:#fff; box-shadow:0 8px 25px rgba(124,92,255,.4); }
     .btn-primary:hover { transform:translateY(-3px); box-shadow:0 12px 30px rgba(124,92,255,.55); }
     .btn-outline { background:transparent; border:2px solid var(--primary); color:var(--text); }
@@ -53,7 +53,7 @@
     #logoImg { width:42px; height:42px; border-radius:12px; object-fit:cover; }
     #logoFallback { width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,var(--primary),var(--secondary)); font-size:1.3rem; color:#fff; }
     .site-name { font-family:'Orbitron',sans-serif; font-weight:800; font-size:1.3rem; background:linear-gradient(135deg,var(--primary),var(--secondary)); -webkit-background-clip:text; background-clip:text; color:transparent; }
-    .nav-links { display:flex; align-items:center; gap:35px; list-style:none; }
+    .nav-links { display:flex; align-items:center; gap:35px; list-style:none; font-family:var(--font-family); }
     .nav-links a { font-weight:500; position:relative; padding:6px 0; transition:var(--transition); }
     .nav-links a::after { content:''; position:absolute; bottom:0; left:0; width:0; height:2px; background:var(--secondary); transition:var(--transition); }
     .nav-links a:hover::after { width:100%; }
@@ -69,7 +69,7 @@
     .user-avatar-btn img { width:100%; height:100%; object-fit:cover; }
     .user-dropdown { position:absolute; top:52px; right:0; background:var(--card); border:1px solid var(--border); border-radius:14px; min-width:190px; box-shadow:var(--shadow); opacity:0; visibility:hidden; transform:translateY(-10px); transition:var(--transition); overflow:hidden; z-index:1200; }
     .user-dropdown.open { opacity:1; visibility:visible; transform:translateY(0); }
-    .user-dropdown a, .user-dropdown button { display:flex; align-items:center; gap:10px; padding:13px 18px; width:100%; background:none; border:none; color:var(--text); font-family:inherit; font-size:.9rem; cursor:pointer; transition:var(--transition); text-align:left; }
+    .user-dropdown a, .user-dropdown button { display:flex; align-items:center; gap:10px; padding:13px 18px; width:100%; background:none; border:none; color:var(--text); font-family:var(--font-family); font-size:.9rem; cursor:pointer; transition:var(--transition); text-align:left; }
     .user-dropdown a:hover, .user-dropdown button:hover { background:var(--bg2); color:var(--primary); }
     .user-dropdown hr { border:none; border-top:1px solid var(--border); }
     .hero { position:relative; min-height:100vh; display:flex; align-items:center; justify-content:center; text-align:center; padding:120px 20px 80px; overflow:hidden; }
@@ -87,56 +87,179 @@
     .section { padding:100px 20px; max-width:1300px; margin:0 auto; }
     .section-header { text-align:center; max-width:600px; margin:0 auto 55px; }
     .section-tag { color:var(--secondary); font-weight:700; letter-spacing:2px; font-size:.85rem; text-transform:uppercase; }
-    .section-header h2 { font-size:clamp(1.8rem,4vw,2.6rem); margin:12px 0; }
-    .section-header p { color:var(--text2); }
+    .section-header h2 { font-size:clamp(1.8rem,4vw,2.6rem); margin:12px 0; font-family:var(--font-family); }
+    .section-header p { color:var(--text2); font-family:var(--font-family); }
     .empty-msg { text-align:center; color:var(--text2); padding:40px; grid-column:1/-1; }
     .reveal { opacity:0; transform:translateY(40px); transition:opacity .7s ease, transform .7s ease; }
     .reveal.visible { opacity:1; transform:translateY(0); }
-    .games-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:28px; }
-    .game-card { background:var(--card); border-radius:var(--radius); overflow:hidden; border:1px solid var(--border); transition:var(--transition); position:relative; }
-    .game-card:hover { transform:translateY(-10px); box-shadow:var(--shadow); border-color:var(--primary); }
-    .game-img-wrap { position:relative; height:280px; overflow:hidden; }
-    .game-img-wrap img { width:100%; height:100%; object-fit:cover; transition:transform .5s ease; }
-    .game-card:hover .game-img-wrap img { transform:scale(1.12); }
-    .game-overlay { position:absolute; inset:0; background:linear-gradient(to top, var(--card) 5%, transparent 60%); }
-    .game-info { padding:20px; position:relative; }
-    .game-genre { color:var(--secondary); font-size:.8rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; }
-    .game-info h3 { margin:8px 0 16px; font-size:1.2rem; }
+    
+    /* Games Grid - Image only with name below */
+    .games-grid { 
+      display:grid; 
+      grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); 
+      gap:16px; 
+    }
+    .game-wrapper {
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      cursor:pointer;
+      transition:var(--transition);
+    }
+    .game-wrapper:hover {
+      transform:translateY(-5px);
+    }
+    .game-card { 
+      background:var(--card); 
+      border-radius:var(--radius); 
+      overflow:hidden; 
+      border:2px solid var(--border); 
+      transition:var(--transition); 
+      position:relative; 
+      width:119.64px;
+      height:119.64px;
+      flex-shrink:0;
+    }
+    .game-card:hover { 
+      border-color:var(--primary); 
+      box-shadow:var(--shadow);
+    }
+    .game-img-wrap { 
+      position:relative; 
+      width:100%;
+      height:100%;
+      overflow:hidden; 
+    }
+    .game-img-wrap img { 
+      width:100%; 
+      height:100%; 
+      object-fit:cover; 
+      transition:transform .5s ease; 
+    }
+    .game-wrapper:hover .game-img-wrap img { 
+      transform:scale(1.08); 
+    }
+    .game-name {
+      margin-top:8px;
+      font-size:.75rem;
+      font-weight:600;
+      font-family:var(--font-family);
+      color:var(--text);
+      text-align:center;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width:120px;
+    }
+
     .filter-chips { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-bottom:45px; }
-    .chip { padding:10px 22px; border-radius:50px; background:var(--card); border:1px solid var(--border); cursor:pointer; font-weight:600; font-size:.9rem; transition:var(--transition); color:var(--text); }
+    .chip { padding:10px 22px; border-radius:50px; background:var(--card); border:1px solid var(--border); cursor:pointer; font-weight:600; font-size:.9rem; transition:var(--transition); color:var(--text); font-family:var(--font-family); }
     .chip.active, .chip:hover { background:linear-gradient(135deg,var(--primary),var(--primary2)); color:#fff; border-color:transparent; }
-    .packages-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:28px; }
-    .package-card { background:var(--card); border-radius:var(--radius); border:1px solid var(--border); overflow:hidden; position:relative; transition:var(--transition); }
-    .package-card:hover { transform:translateY(-8px); box-shadow:var(--shadow); border-color:var(--secondary); }
-    .badge-ribbon { position:absolute; top:16px; left:-6px; background:linear-gradient(135deg,var(--accent),#ff7a5c); color:#fff; padding:6px 16px; font-size:.75rem; font-weight:700; z-index:2; border-radius:0 20px 20px 0; box-shadow:0 4px 10px rgba(0,0,0,.3); }
-    .pkg-img-wrap { height:170px; overflow:hidden; }
-    .pkg-img-wrap img { width:100%; height:100%; object-fit:cover; transition:transform .5s ease; }
-    .package-card:hover .pkg-img-wrap img { transform:scale(1.1); }
-    .pkg-info { padding:20px; }
-    .pkg-game-tag { font-size:.75rem; color:var(--secondary); font-weight:700; text-transform:uppercase; }
-    .pkg-info h4 { margin:8px 0; font-size:1.1rem; }
-    .pkg-desc { color:var(--text2); font-size:.88rem; margin-bottom:16px; min-height:20px; }
-    .pkg-price-row { display:flex; align-items:center; justify-content:space-between; gap:10px; }
-    .old-price { text-decoration:line-through; color:var(--text2); font-size:.85rem; margin-right:8px; }
-    .price { font-size:1.3rem; font-weight:800; color:var(--secondary); }
+    
+    /* Updated Packages Grid - Smaller cards 185x54 style */
+    .packages-grid { 
+      display:grid; 
+      grid-template-columns:repeat(auto-fill,minmax(185px,1fr)); 
+      gap:12px; 
+    }
+    .package-card { 
+      background:var(--card); 
+      border-radius:var(--radius); 
+      border:1px solid var(--border); 
+      overflow:hidden; 
+      position:relative; 
+      transition:var(--transition); 
+      cursor:pointer;
+      height:54px;
+      display:flex;
+      align-items:center;
+      padding:0 14px;
+    }
+    .package-card:hover { 
+      transform:translateY(-3px); 
+      box-shadow:var(--shadow); 
+      border-color:var(--secondary); 
+      background:var(--bg2);
+    }
+    .badge-ribbon { 
+      position:absolute; 
+      top:2px; 
+      left:-4px; 
+      background:linear-gradient(135deg,var(--accent),#ff7a5c); 
+      color:#fff; 
+      padding:2px 10px; 
+      font-size:.55rem; 
+      font-weight:700; 
+      z-index:2; 
+      border-radius:0 12px 12px 0; 
+      box-shadow:0 2px 8px rgba(0,0,0,.3); 
+      font-family:var(--font-family);
+    }
+    .pkg-img-wrap { 
+      display:none; 
+    }
+    .pkg-info { 
+      flex:1;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      min-width:0;
+    }
+    .pkg-game-tag { 
+      display:none; 
+    }
+    .pkg-info h4 { 
+      margin:0; 
+      font-size:.85rem;
+      font-family:var(--font-family);
+      font-weight:600;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .pkg-desc { 
+      display:none; 
+    }
+    .pkg-price-row { 
+      display:flex; 
+      align-items:center; 
+      gap:6px;
+      flex-shrink:0;
+    }
+    .old-price { 
+      text-decoration:line-through; 
+      color:var(--text2); 
+      font-size:.65rem; 
+      margin-right:4px; 
+    }
+    .price { 
+      font-size:.95rem; 
+      font-weight:800; 
+      color:var(--secondary); 
+    }
+    .pkg-info .btn { 
+      display:none; 
+    }
+
     .features-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:26px; }
     .feature-card { background:var(--card); padding:35px 25px; border-radius:var(--radius); text-align:center; border:1px solid var(--border); transition:var(--transition); }
     .feature-card:hover { transform:translateY(-8px); border-color:var(--primary); box-shadow:var(--shadow); }
     .feature-icon { width:65px; height:65px; margin:0 auto 20px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,var(--primary),var(--secondary)); font-size:1.6rem; color:#fff; }
-    .feature-card h4 { margin-bottom:10px; }
-    .feature-card p { color:var(--text2); font-size:.9rem; }
+    .feature-card h4 { margin-bottom:10px; font-family:var(--font-family); }
+    .feature-card p { color:var(--text2); font-size:.9rem; font-family:var(--font-family); }
     footer { background:var(--bg2); border-top:1px solid var(--border); padding:60px 20px 25px; margin-top:60px; }
     .footer-container { max-width:1300px; margin:0 auto; display:flex; flex-wrap:wrap; justify-content:space-between; gap:40px; padding-bottom:30px; }
-    .footer-brand p { color:var(--text2); margin-top:14px; max-width:320px; }
-    .footer-links h4 { margin-bottom:18px; font-size:1rem; }
+    .footer-brand p { color:var(--text2); margin-top:14px; max-width:320px; font-family:var(--font-family); }
+    .footer-links h4 { margin-bottom:18px; font-size:1rem; font-family:var(--font-family); }
     .footer-links ul { list-style:none; }
     .footer-links li { margin-bottom:10px; }
-    .footer-links a { color:var(--text2); transition:var(--transition); }
+    .footer-links a { color:var(--text2); transition:var(--transition); font-family:var(--font-family); }
     .footer-links a:hover { color:var(--primary); padding-left:5px; }
     .social-icons { display:flex; gap:12px; margin-top:16px; }
     .social-icons a { width:38px; height:38px; border-radius:50%; background:var(--card); display:flex; align-items:center; justify-content:center; border:1px solid var(--border); transition:var(--transition); }
     .social-icons a:hover { background:var(--primary); transform:translateY(-4px); }
-    .footer-bottom { text-align:center; padding-top:25px; border-top:1px solid var(--border); color:var(--text2); font-size:.85rem; }
+    .footer-bottom { text-align:center; padding-top:25px; border-top:1px solid var(--border); color:var(--text2); font-size:.85rem; font-family:var(--font-family); }
     .modal { position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:2000; display:flex; align-items:center; justify-content:center; opacity:0; visibility:hidden; transition:var(--transition); padding:20px; }
     .modal.active { opacity:1; visibility:visible; }
     .modal-box { background:var(--card2); border-radius:var(--radius); padding:35px; max-width:450px; width:100%; transform:scale(.9); transition:var(--transition); border:1px solid var(--border); position:relative; max-height:90vh; overflow-y:auto; }
@@ -145,34 +268,36 @@
     .modal-close { position:absolute; top:18px; right:18px; width:34px; height:34px; border-radius:50%; background:var(--card); border:none; cursor:pointer; color:var(--text); font-size:1rem; }
     .modal-pkg-preview { display:flex; align-items:center; gap:14px; margin-bottom:22px; padding-bottom:20px; border-bottom:1px solid var(--border); }
     .modal-pkg-preview img { width:60px; height:60px; border-radius:10px; object-fit:cover; }
+    .modal-pkg-preview h4 { font-family:var(--font-family); }
+    .modal h3 { font-family:var(--font-family); }
     .form-group { margin-bottom:18px; }
-    .form-group label { display:block; margin-bottom:8px; font-size:.9rem; font-weight:600; color:var(--text2); }
-    .form-group input, .form-group textarea { width:100%; padding:12px 15px; border-radius:10px; border:1px solid var(--border); background:var(--bg2); color:var(--text); font-family:inherit; font-size:.95rem; transition:var(--transition); }
+    .form-group label { display:block; margin-bottom:8px; font-size:.9rem; font-weight:600; color:var(--text2); font-family:var(--font-family); }
+    .form-group input, .form-group textarea { width:100%; padding:12px 15px; border-radius:10px; border:1px solid var(--border); background:var(--bg2); color:var(--text); font-family:var(--font-family); font-size:.95rem; transition:var(--transition); }
     .form-group input:focus, .form-group textarea:focus { outline:none; border-color:var(--primary); box-shadow:0 0 0 3px rgba(124,92,255,.2); }
     .form-group input:disabled { opacity:.65; }
-    .divider { display:flex; align-items:center; gap:12px; margin:20px 0; color:var(--text2); font-size:.8rem; }
+    .divider { display:flex; align-items:center; gap:12px; margin:20px 0; color:var(--text2); font-size:.8rem; font-family:var(--font-family); }
     .divider::before, .divider::after { content:''; flex:1; height:1px; background:var(--border); }
     .profile-header { display:flex; align-items:center; gap:18px; margin-bottom:26px; padding-bottom:22px; border-bottom:1px solid var(--border); }
     .profile-avatar { width:70px; height:70px; border-radius:50%; overflow:hidden; border:3px solid var(--primary); flex-shrink:0; background:linear-gradient(135deg,var(--primary),var(--secondary)); display:flex; align-items:center; justify-content:center; color:#fff; font-size:1.6rem; font-weight:700; }
     .profile-avatar img { width:100%; height:100%; object-fit:cover; }
-    .profile-header h3 { margin-bottom:4px; font-family:'Poppins'; font-size:1.15rem; }
-    .profile-header p { color:var(--text2); font-size:.85rem; }
+    .profile-header h3 { margin-bottom:4px; font-family:var(--font-family); font-size:1.15rem; }
+    .profile-header p { color:var(--text2); font-size:.85rem; font-family:var(--font-family); }
     .profile-stats { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:26px; }
     .pstat-card { background:var(--bg2); border-radius:12px; padding:18px; text-align:center; border:1px solid var(--border); }
     .pstat-card h4 { font-size:1.5rem; color:var(--secondary); font-family:'Orbitron'; }
-    .pstat-card span { font-size:.78rem; color:var(--text2); text-transform:uppercase; letter-spacing:.5px; }
-    .profile-orders h4 { margin-bottom:14px; font-size:1rem; font-family:'Poppins'; font-weight:600; }
+    .pstat-card span { font-size:.78rem; color:var(--text2); text-transform:uppercase; letter-spacing:.5px; font-family:var(--font-family); }
+    .profile-orders h4 { margin-bottom:14px; font-size:1rem; font-family:var(--font-family); font-weight:600; }
     .porder-item { display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid var(--border); gap:10px; }
     .porder-item:last-child { border-bottom:none; }
-    .porder-info { font-size:.85rem; }
+    .porder-info { font-size:.85rem; font-family:var(--font-family); }
     .porder-info small { color:var(--text2); display:block; }
-    .status-badge { padding:4px 12px; border-radius:20px; font-size:.72rem; font-weight:700; text-transform:capitalize; white-space:nowrap; }
+    .status-badge { padding:4px 12px; border-radius:20px; font-size:.72rem; font-weight:700; text-transform:capitalize; white-space:nowrap; font-family:var(--font-family); }
     .status-pending { background:rgba(255,179,71,.15); color:var(--warn); }
     .status-processing { background:rgba(0,229,255,.15); color:var(--secondary); }
     .status-completed { background:rgba(46,204,113,.15); color:var(--success); }
     .status-cancelled { background:rgba(255,77,109,.15); color:var(--danger); }
     #toastContainer { position:fixed; bottom:25px; right:25px; z-index:3000; display:flex; flex-direction:column; gap:12px; }
-    .toast { background:var(--card); border-left:4px solid var(--primary); padding:15px 22px; border-radius:10px; box-shadow:var(--shadow); display:flex; align-items:center; gap:10px; transform:translateX(120%); opacity:0; transition:all .4s ease; min-width:260px; }
+    .toast { background:var(--card); border-left:4px solid var(--primary); padding:15px 22px; border-radius:10px; box-shadow:var(--shadow); display:flex; align-items:center; gap:10px; transform:translateX(120%); opacity:0; transition:all .4s ease; min-width:260px; font-family:var(--font-family); }
     .toast.show { transform:translateX(0); opacity:1; }
     .toast-success { border-color:var(--success); }
     .toast-error { border-color:var(--danger); }
@@ -188,14 +313,196 @@
       #hamburger.active span:nth-child(3) { transform:rotate(-45deg) translate(6px,-6px); }
       .footer-container { flex-direction:column; }
       .profile-stats { grid-template-columns:1fr; }
+      .games-grid { grid-template-columns:repeat(auto-fill,minmax(100px,1fr)); gap:12px; }
+      .game-card { width:100px; height:100px; }
+      .packages-grid { grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); }
+      .package-card { height:48px; padding:0 10px; }
+      .pkg-info h4 { font-size:.75rem; }
+      .price { font-size:.8rem; }
     }
     .auth-email-form { margin-top: 20px; border-top: 1px solid var(--border); padding-top: 20px; }
     .auth-email-form .form-group { margin-bottom: 12px; }
+    
+    /* Package Grid container - shown when game is clicked */
+    .packages-section { display:none; }
+    .packages-section.active { display:block; }
+    .back-to-games { 
+      display:inline-flex; 
+      align-items:center; 
+      gap:8px; 
+      margin-bottom:20px; 
+      cursor:pointer; 
+      color:var(--secondary); 
+      font-weight:600;
+      font-family:var(--font-family);
+      transition:var(--transition);
+    }
+    .back-to-games:hover { color:var(--primary); transform:translateX(-5px); }
+
+    /* Package Category Header */
+    .package-category-header {
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-bottom:25px;
+      justify-content:center;
+    }
+    .package-category-chip {
+      padding:8px 20px;
+      border-radius:50px;
+      background:var(--card);
+      border:2px solid var(--border);
+      cursor:pointer;
+      font-weight:600;
+      font-size:.8rem;
+      transition:var(--transition);
+      color:var(--text);
+      font-family:var(--font-family);
+    }
+    .package-category-chip:hover {
+      border-color:var(--primary);
+      color:var(--primary);
+    }
+    .package-category-chip.active {
+      background:linear-gradient(135deg,var(--primary),var(--primary2));
+      color:#fff;
+      border-color:transparent;
+    }
+
+    /* FAB - Floating Action Button with Support */
+    .fab-container {
+      position:fixed;
+      bottom:30px;
+      right:30px;
+      z-index:1000;
+      display:flex;
+      flex-direction:column;
+      align-items:flex-end;
+      gap:10px;
+    }
+    .fab-sub-buttons {
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-bottom:10px;
+      opacity:0;
+      transform:translateY(20px) scale(0.8);
+      transition:all 0.3s cubic-bezier(.4,0,.2,1);
+      pointer-events:none;
+    }
+    .fab-sub-buttons.open {
+      opacity:1;
+      transform:translateY(0) scale(1);
+      pointer-events:auto;
+    }
+    .fab-sub-btn {
+      width:48px;
+      height:48px;
+      border-radius:50%;
+      background:var(--card);
+      border:2px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:var(--text);
+      transition:var(--transition);
+      font-size:1.2rem;
+      text-decoration:none;
+      box-shadow:var(--shadow);
+      cursor:pointer;
+    }
+    .fab-sub-btn:hover {
+      transform:scale(1.1);
+      border-color:var(--secondary);
+    }
+    .fab-sub-btn.telegram:hover {
+      background:#0088cc;
+      color:#fff;
+      border-color:#0088cc;
+    }
+    .fab-sub-btn.whatsapp:hover {
+      background:#25D366;
+      color:#fff;
+      border-color:#25D366;
+    }
+    
+    .fab-main-btn {
+      width:60px;
+      height:60px;
+      border-radius:50%;
+      background:linear-gradient(135deg,var(--primary),var(--secondary));
+      color:#fff;
+      border:none;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:1.5rem;
+      cursor:pointer;
+      box-shadow:0 4px 20px rgba(124,92,255,.5);
+      transition:var(--transition);
+      position:relative;
+      font-weight:700;
+      font-family:var(--font-family);
+    }
+    .fab-main-btn:hover {
+      transform:scale(1.08);
+      box-shadow:0 6px 30px rgba(124,92,255,.7);
+    }
+    .fab-main-btn .icon-help {
+      width:28px;
+      height:28px;
+    }
+    .fab-main-btn .icon-close {
+      display:none;
+      font-size:1.6rem;
+    }
+    .fab-main-btn.open .icon-help {
+      display:none;
+    }
+    .fab-main-btn.open .icon-close {
+      display:block;
+    }
+
+    /* Mobile adjustments for FAB */
+    @media(max-width:768px) {
+      .fab-container {
+        bottom:20px;
+        right:20px;
+      }
+      .fab-main-btn {
+        width:52px;
+        height:52px;
+        font-size:1.2rem;
+      }
+      .fab-sub-btn {
+        width:42px;
+        height:42px;
+        font-size:1rem;
+      }
+    }
   </style>
 </head>
 <body>
 
 <div id="preloader"><div class="loader-ring"></div></div>
+
+<!-- FAB - Floating Action Button with Support -->
+<div class="fab-container">
+  <div class="fab-sub-buttons" id="fabSubButtons">
+    <a href="#" id="telegramFabLink" target="_blank" class="fab-sub-btn telegram" title="Telegram">
+      <i class="fa-brands fa-telegram"></i>
+    </a>
+    <a href="#" id="whatsappFabLink" target="_blank" class="fab-sub-btn whatsapp" title="WhatsApp">
+      <i class="fa-brands fa-whatsapp"></i>
+    </a>
+  </div>
+  <button class="fab-main-btn" id="fabMainBtn" aria-label="Toggle contact options">
+    <svg class="icon-help" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+      <path fill="currentColor" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM169.8 165.3c7.9-22.3 29.1-37.3 52.8-37.3l58.3 0c34.9 0 63.1 28.3 63.1 63.1c0 22.6-12.1 43.5-31.7 54.8L280 264.4c-.2 13-10.9 23.6-24 23.6c-13.3 0-24-10.7-24-24l0-13.5c0-8.6 4.6-16.5 12.2-20.9l29.2-16.8c7.2-4.1 11.5-11.5 11.5-19.4c0-8.3-6.8-15.1-15.1-15.1l-58.3 0c-3.4 0-6.4 2.1-7.5 5.3l-.4 1.2c-4.4 12.5-18.2 19-30.6 14.6s-19-18.2-14.6-30.6l.4-1.2zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/>
+    </svg>
+    <span class="icon-close">✕</span>
+  </button>
+</div>
 
 <nav class="navbar" id="navbar">
   <div class="nav-container">
@@ -207,12 +514,11 @@
     <ul class="nav-links" id="navLinks">
       <li><a href="#home">Home</a></li>
       <li><a href="#games">Games</a></li>
-      <li><a href="#packages">Packages</a></li>
       <li><a href="#features">Why Us</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
     <div class="nav-right">
-      <button id="themeToggle"><i class="fa-solid fa-sun" id="themeIcon"></i></button>
+      <button type="button" id="themeToggle"><i class="fa-solid fa-sun" id="themeIcon"></i></button>
       <button class="btn btn-primary btn-sm" id="loginNavBtn"><i class="fa-brands fa-google"></i> Login</button>
       <div class="user-menu" id="userMenu">
         <button class="user-avatar-btn" id="userAvatarBtn"><span id="avatarInitial">U</span><img id="avatarImg" src="" style="display:none;"></button>
@@ -237,20 +543,32 @@
     <p id="heroSubtitle">TopUp and Flex</p>
     <div class="hero-btns">
       <a href="#games" class="btn btn-primary"><i class="fa-solid fa-rocket"></i> Explore Games</a>
-      <a href="#packages" class="btn btn-outline"><i class="fa-solid fa-box-open"></i> View Packages</a>
+      <a href="#features" class="btn btn-outline"><i class="fa-solid fa-star"></i> Why Us</a>
     </div>
   </div>
 </section>
 
 <section class="section" id="games">
-  <div class="section-header reveal"><span class="section-tag">Our Catalog</span><h2>Popular Games</h2><p>Choose your game and explore exclusive item packages.</p></div>
-  <div class="games-grid" id="gamesGrid"><p class="empty-msg">Loading games...</p></div>
-</section>
-
-<section class="section" id="packages">
-  <div class="section-header reveal"><span class="section-tag">Marketplace</span><h2>Item Packages</h2><p>Instant delivery. Best prices. Secure checkout.</p></div>
-  <div class="filter-chips" id="filterChips"></div>
-  <div class="packages-grid" id="packagesGrid"><p class="empty-msg">Loading packages...</p></div>
+  <div class="section-header reveal">
+    <span class="section-tag" id="catalogTag">Catalog</span>
+    <h2 id="catalogTitle">Free Fire</h2>
+    <p id="catalogSubtitle"></p>
+  </div>
+  
+  <!-- Games Grid -->
+  <div id="gamesContainer">
+    <div class="games-grid" id="gamesGrid"><p class="empty-msg">Loading games...</p></div>
+  </div>
+  
+  <!-- Packages Section (hidden until game is clicked) -->
+  <div class="packages-section" id="packagesSection">
+    <div class="back-to-games" id="backToGames">
+      <i class="fa-solid fa-arrow-left"></i> Back to Games
+    </div>
+    <!-- Package Category Header - shows categories like in the image -->
+    <div class="package-category-header" id="packageCategoryHeader"></div>
+    <div class="packages-grid" id="packagesGrid"><p class="empty-msg">Loading packages...</p></div>
+  </div>
 </section>
 
 <section class="section" id="features">
@@ -265,8 +583,17 @@
 
 <footer id="contact">
   <div class="footer-container">
-    <div class="footer-brand"><div class="logo-wrap"><span class="site-name">Flex TopUp</span></div><p>Premium marketplace for game items, top-ups and packages, trusted by thousands of gamers worldwide.</p><div class="social-icons"><a href="#"><i class="fa-brands fa-facebook-f"></i></a><a href="#"><i class="fa-brands fa-twitter"></i></a><a href="#"><i class="fa-brands fa-discord"></i></a><a href="#"><i class="fa-brands fa-instagram"></i></a></div></div>
-    <div class="footer-links"><h4>Quick Links</h4><ul><li><a href="#home">Home</a></li><li><a href="#games">Games</a></li><li><a href="#packages">Packages</a></li><li><a href="#features">Why Us</a></li></ul></div>
+    <div class="footer-brand">
+      <div class="logo-wrap"><span class="site-name">Flex TopUp</span></div>
+      <p>Premium marketplace for game items, top-ups and packages, trusted by thousands of gamers worldwide.</p>
+      <div class="social-icons">
+        <a href="#" id="footerFb"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" id="footerTw"><i class="fa-brands fa-twitter"></i></a>
+        <a href="#" id="footerDiscord"><i class="fa-brands fa-discord"></i></a>
+        <a href="#" id="footerIg"><i class="fa-brands fa-instagram"></i></a>
+      </div>
+    </div>
+    <div class="footer-links"><h4>Quick Links</h4><ul><li><a href="#home">Home</a></li><li><a href="#games">Games</a></li><li><a href="#features">Why Us</a></li></ul></div>
     <div class="footer-links"><h4>Support</h4><ul><li><a href="#">Help Center</a></li><li><a href="#">Terms of Service</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Refund Policy</a></li></ul></div>
   </div>
   <div class="footer-bottom" id="footerText">© 2024 Flex TopUp. All rights reserved.</div>
@@ -281,13 +608,24 @@
     <h3 style="margin-bottom:20px;">Place Your Order</h3>
     <div class="modal-pkg-preview">
       <img id="modalPkgImg" src="" alt="">
-      <div><h4 id="modalPkgName" style="font-family:'Poppins';font-size:1rem;"></h4><span class="price" id="modalPkgPrice"></span></div>
+      <div><h4 id="modalPkgName" style="font-size:1rem;"></h4><span class="price" id="modalPkgPrice"></span></div>
     </div>
     <form id="orderForm">
-      <div class="form-group"><label for="orderName">Your UID</label><input type="number" id="orderName" placeholder="Enter your game UID" required></div>
-      <div class="form-group"><label for="orderQty">Quantity</label><input type="number" id="orderQty" min="1" value="1" required></div>
-      <div class="form-group"><label for="transactionId">TRANSACTION ID</label><input type="text" id="transactionId" placeholder="Enter your transaction ID" required></div>
-      <p style="color:var(--secondary);font-weight:600;text-align:center;margin:10px 0;"><i class="fa-solid fa-mobile-screen-button"></i> Our Bkash, Nagad Number: 01770206757</p>
+      <div class="form-group">
+        <label for="orderName">Your UID</label>
+        <input type="text" id="orderName" placeholder="Enter your game UID" required>
+      </div>
+      <div class="form-group">
+        <label for="orderQty">Quantity</label>
+        <input type="number" id="orderQty" min="1" value="1" required>
+      </div>
+      <div class="form-group">
+        <label for="transactionId">TRANSACTION ID</label>
+        <input type="text" id="transactionId" placeholder="Enter your transaction ID" required>
+      </div>
+      <p style="color:var(--secondary);font-weight:600;text-align:center;margin:10px 0;">
+        <i class="fa-solid fa-mobile-screen-button"></i> Our Bkash, Nagad Number: 01770206757
+      </p>
       <button type="submit" class="btn btn-primary btn-full"><i class="fa-solid fa-paper-plane"></i> Place Order</button>
     </form>
   </div>
@@ -301,7 +639,7 @@
       <div style="width:60px;height:60px;border-radius:16px;margin:0 auto 18px;background:linear-gradient(135deg,var(--primary),var(--secondary));display:flex;align-items:center;justify-content:center;font-size:1.6rem;color:#fff;"><i class="fa-solid fa-user"></i></div>
       <h3>Welcome to Flex TopUp</h3>
       <p style="color:var(--text2); font-size:.9rem; margin:10px 0 24px;">Login to track your orders and spending history</p>
-      <button class="btn btn-google btn-full" id="googleLoginBtn"><i class="fa-brands fa-google"></i> Continue with Google</button>
+      <button type="button" class="btn btn-google btn-full" id="googleLoginBtn"><i class="fa-brands fa-google"></i> Continue with Google</button>
       <div class="divider">or</div>
       <form id="emailLoginForm" style="text-align:left;">
         <div class="form-group"><label>Email</label><input type="email" id="emailLoginInput" placeholder="your@email.com" required></div>
@@ -358,6 +696,8 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 let currentUser = null;
+let currentCatalog = 'games';
+let packageCategories = [];
 
 // ============================================================
 // PRELOADER
@@ -532,7 +872,13 @@ document.getElementById('googleLoginBtn').addEventListener('click', async () => 
     await auth.signInWithPopup(googleProvider);
     showToast('Logged in successfully!', 'success');
   } catch (err) {
-    showToast('Login failed. Try again.', 'error');
+    let msg = 'Login failed. Try again.';
+    if (err.code === 'auth/popup-closed-by-user') {
+      msg = 'Login popup was closed. Please try again.';
+    } else if (err.code === 'auth/popup-blocked') {
+      msg = 'Popup was blocked. Please allow popups for this site.';
+    }
+    showToast(msg, 'error');
     console.error(err);
   }
 });
@@ -550,7 +896,11 @@ emailLoginForm.addEventListener('submit', async (e) => {
     showToast('Welcome back!', 'success');
     document.getElementById('loginModal').classList.remove('active');
   } catch (err) {
-    showToast(err.message, 'error');
+    let msg = err.message;
+    if (err.code === 'auth/user-not-found') msg = 'No account found with this email.';
+    else if (err.code === 'auth/wrong-password') msg = 'Incorrect password.';
+    else if (err.code === 'auth/invalid-email') msg = 'Invalid email address.';
+    showToast(msg, 'error');
   }
 });
 
@@ -563,13 +913,17 @@ emailRegisterForm.addEventListener('submit', async (e) => {
   const email = document.getElementById('registerEmail').value.trim();
   const password = document.getElementById('registerPassword').value.trim();
   if (!name || !email || !password) return showToast('Please fill all fields.', 'error');
+  if (password.length < 6) return showToast('Password must be at least 6 characters.', 'error');
   try {
     const cred = await auth.createUserWithEmailAndPassword(email, password);
     await cred.user.updateProfile({ displayName: name });
-    showToast('Account created!', 'success');
+    showToast('Account created! Welcome to Flex TopUp.', 'success');
     document.getElementById('loginModal').classList.remove('active');
   } catch (err) {
-    showToast(err.message, 'error');
+    let msg = err.message;
+    if (err.code === 'auth/email-already-in-use') msg = 'Email already in use. Please login.';
+    else if (err.code === 'auth/invalid-email') msg = 'Invalid email address.';
+    showToast(msg, 'error');
   }
 });
 
@@ -587,7 +941,10 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
 // ============================================================
 document.getElementById('openProfileBtn').addEventListener('click', async () => {
   userDropdown.classList.remove('open');
-  if (!currentUser) return;
+  if (!currentUser) {
+    showToast('Please login first.', 'error');
+    return;
+  }
   document.getElementById('profileModal').classList.add('active');
   const initial = (currentUser.displayName || currentUser.email || 'U').charAt(0).toUpperCase();
   document.getElementById('profileName').textContent = currentUser.displayName || 'User';
@@ -607,7 +964,9 @@ document.getElementById('openProfileBtn').addEventListener('click', async () => 
       const d = userDoc.data().createdAt.toDate();
       document.getElementById('profileJoined').textContent = 'Member since ' + (d ? d.toLocaleDateString() : 'N/A');
     }
-  } catch (e) {}
+  } catch (e) {
+    console.error('Error fetching user data:', e);
+  }
   try {
     const ordersSnap = await db.collection('orders').where('uid', '==', currentUser.uid).get();
     let orders = [];
@@ -628,7 +987,7 @@ document.getElementById('openProfileBtn').addEventListener('click', async () => 
         const date = o.createdAt && o.createdAt.toDate ? o.createdAt.toDate().toLocaleDateString() : '-';
         const total = ((Number(o.price) || 0) * (Number(o.quantity) || 1)).toFixed(2);
         return `<div class="porder-item">
-          <div class="porder-info"><strong>${o.packageTitle || '-'}</strong><small>${o.gameName || ''} • Qty: ${o.quantity || 1} • ${date}</small></div>
+          <div class="porder-info"><strong>${o.packageTitle || 'Package'}</strong><small>${o.gameName || ''} • Qty: ${o.quantity || 1} • ${date}</small></div>
           <div style="text-align:right;">
             <div style="font-weight:700;color:var(--secondary);">৳${total}</div>
             <span class="status-badge status-${o.status || 'pending'}">${o.status || 'pending'}</span>
@@ -636,18 +995,45 @@ document.getElementById('openProfileBtn').addEventListener('click', async () => 
         </div>`;
       }).join('');
     }
-  } catch (err) { console.error(err); }
+  } catch (err) { 
+    console.error('Error fetching orders:', err);
+    document.getElementById('profileOrdersList').innerHTML = '<p class="empty-msg">Unable to load orders.</p>';
+  }
 });
 
 // ============================================================
-// CONFIG
+// FAB - Floating Action Button
+// ============================================================
+const fabMainBtn = document.getElementById('fabMainBtn');
+const fabSubButtons = document.getElementById('fabSubButtons');
+
+fabMainBtn.addEventListener('click', function() {
+  this.classList.toggle('open');
+  fabSubButtons.classList.toggle('open');
+});
+
+// Close FAB sub-buttons when clicking outside
+document.addEventListener('click', function(e) {
+  const fabContainer = document.querySelector('.fab-container');
+  if (!fabContainer.contains(e.target)) {
+    fabMainBtn.classList.remove('open');
+    fabSubButtons.classList.remove('open');
+  }
+});
+
+// ============================================================
+// CONFIG - Support for multiple catalogs, fonts, social links, etc.
 // ============================================================
 db.collection('config').doc('site').onSnapshot(doc => {
   const data = doc.exists ? doc.data() : {};
+  
+  // Site name
   const siteName = data.siteName || 'Flex TopUp';
   document.title = siteName + ' - Premium Game Items';
   document.querySelectorAll('.site-name').forEach(el => el.textContent = siteName);
   document.getElementById('footerText').textContent = `© ${new Date().getFullYear()} ${siteName}. All rights reserved.`;
+  
+  // Logo
   const logoImg = document.getElementById('logoImg');
   const logoFallback = document.getElementById('logoFallback');
   if (data.logoUrl) {
@@ -659,24 +1045,97 @@ db.collection('config').doc('site').onSnapshot(doc => {
     logoImg.style.display = 'none';
     logoFallback.style.display = 'flex';
   }
+  
+  // Hero content
   document.getElementById('heroTitle').textContent = data.heroTitle || 'Get Free Fire Diamonds at the Best Price';
   document.getElementById('heroSubtitle').textContent = data.heroSubtitle || 'TopUp and Flex';
   document.getElementById('tagline').textContent = data.tagline || 'Trusted Marketplace to Buy Free Fire Diamonds';
-}, err => console.error(err));
+  
+  // Catalog section
+  document.getElementById('catalogTag').textContent = data.catalogTag || 'Catalog';
+  document.getElementById('catalogTitle').textContent = data.catalogTitle || 'Free Fire';
+  document.getElementById('catalogSubtitle').textContent = data.catalogSubtitle || '';
+  
+  // Font support - changeable through admin panel
+  if (data.fontFamily) {
+    document.documentElement.style.setProperty('--font-family', data.fontFamily);
+    if (data.headingFont) {
+      document.querySelectorAll('h1, h2, h3, h4').forEach(el => {
+        if (!el.classList.contains('site-name')) {
+          el.style.fontFamily = data.headingFont;
+        }
+      });
+    }
+  }
+  
+  // Footer Social Links (keep these)
+  if (data.fbLink) document.getElementById('footerFb').href = data.fbLink;
+  if (data.igLink) document.getElementById('footerIg').href = data.igLink;
+  if (data.xLink) document.getElementById('footerTw').href = data.xLink;
+  if (data.discordLink) document.getElementById('footerDiscord').href = data.discordLink;
+  
+  // FAB Support Links - Right Side (Telegram, WhatsApp)
+  if (data.telegramLink) {
+    document.getElementById('telegramFabLink').href = data.telegramLink;
+  }
+  if (data.whatsappLink) {
+    document.getElementById('whatsappFabLink').href = data.whatsappLink;
+  }
+  
+  // Package Categories
+  packageCategories = data.packageCategories || [];
+  renderPackageCategories();
+  
+  // Catalog type
+  currentCatalog = data.catalogType || 'games';
+  
+}, err => console.error('Config error:', err));
+
+// ============================================================
+// RENDER PACKAGE CATEGORIES
+// ============================================================
+function renderPackageCategories() {
+  const header = document.getElementById('packageCategoryHeader');
+  if (packageCategories.length === 0) {
+    header.style.display = 'none';
+    return;
+  }
+  header.style.display = 'flex';
+  header.innerHTML = packageCategories.map((cat, index) => `
+    <button class="package-category-chip ${index === 0 ? 'active' : ''}" data-category="${cat.id || cat}">
+      ${cat.label || cat}
+    </button>
+  `).join('');
+  
+  // Add click event to category chips
+  header.querySelectorAll('.package-category-chip').forEach(chip => {
+    chip.addEventListener('click', function() {
+      header.querySelectorAll('.package-category-chip').forEach(c => c.classList.remove('active'));
+      this.classList.add('active');
+      const category = this.dataset.category;
+      filterPackagesByCategory(category);
+    });
+  });
+}
 
 // ============================================================
 // GAMES
 // ============================================================
 let gamesCache = [];
 const gamesGrid = document.getElementById('gamesGrid');
-const filterChips = document.getElementById('filterChips');
+const packagesSection = document.getElementById('packagesSection');
+const packagesGrid = document.getElementById('packagesGrid');
+const backToGamesBtn = document.getElementById('backToGames');
+let currentGameId = null;
 
 db.collection('games').orderBy('order', 'asc').onSnapshot(snap => {
   gamesCache = [];
   snap.forEach(d => gamesCache.push({ id: d.id, ...d.data() }));
   renderGames();
-  renderFilterChips();
-}, err => { gamesGrid.innerHTML = '<p class="empty-msg">Unable to load games.</p>'; });
+}, err => { 
+  console.error('Games error:', err);
+  gamesGrid.innerHTML = '<p class="empty-msg">Unable to load games. Please refresh.</p>'; 
+});
 
 function renderGames() {
   const active = gamesCache.filter(g => g.active !== false);
@@ -685,78 +1144,145 @@ function renderGames() {
     return;
   }
   gamesGrid.innerHTML = active.map((g, i) => `
-    <div class="game-card reveal" style="transition-delay:${i * 0.07}s">
-      <div class="game-img-wrap"><img src="${g.image || 'https://via.placeholder.com/400x500?text=Game'}" alt="${g.name}" loading="lazy"><div class="game-overlay"></div></div>
-      <div class="game-info"><span class="game-genre">${g.genre || 'Game'}</span><h3>${g.name}</h3><button class="btn btn-outline btn-sm" onclick="filterByGame('${g.id}')"><i class="fa-solid fa-boxes-stacked"></i> View Packages</button></div>
+    <div class="game-wrapper reveal" style="transition-delay:${i * 0.05}s">
+      <div class="game-card" data-game-id="${g.id}">
+        <div class="game-img-wrap">
+          <img src="${g.image || 'https://via.placeholder.com/120x120?text=Game'}" alt="${g.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/120x120?text=Game'">
+        </div>
+      </div>
+      <div class="game-name">${g.name}</div>
     </div>
   `).join('');
+  
+  // Add click event to game cards
+  document.querySelectorAll('.game-card').forEach(card => {
+    card.addEventListener('click', function() {
+      const gameId = this.dataset.gameId;
+      const game = active.find(g => g.id === gameId);
+      if (game) {
+        showPackagesForGame(gameId, game.name);
+      }
+    });
+  });
+  
   observeReveal();
 }
 
-function renderFilterChips() {
-  const active = gamesCache.filter(g => g.active !== false);
-  filterChips.innerHTML = `<button class="chip active" data-id="all">All Games</button>` +
-    active.map(g => `<button class="chip" data-id="${g.id}">${g.name}</button>`).join('');
-  filterChips.querySelectorAll('.chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      filterChips.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-      renderPackages(chip.dataset.id);
+// Show packages for selected game
+function showPackagesForGame(gameId, gameName) {
+  currentGameId = gameId;
+  // Hide games grid, show packages section
+  document.getElementById('gamesContainer').style.display = 'none';
+  packagesSection.classList.add('active');
+  
+  // Update header
+  document.getElementById('catalogTag').textContent = 'Packages';
+  document.getElementById('catalogTitle').textContent = gameName;
+  document.getElementById('catalogSubtitle').textContent = 'Select a package to order';
+  
+  // Load packages for this game
+  renderPackages(gameId);
+  
+  // Reset category chips
+  const header = document.getElementById('packageCategoryHeader');
+  if (header) {
+    header.querySelectorAll('.package-category-chip').forEach((chip, index) => {
+      chip.classList.toggle('active', index === 0);
     });
-  });
-}
-window.filterByGame = function(id) {
+  }
+  
+  // Scroll to packages
   document.getElementById('packages').scrollIntoView({ behavior: 'smooth' });
-  setTimeout(() => {
-    filterChips.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c.dataset.id === id));
-    renderPackages(id);
-  }, 500);
-};
+}
+
+// Back to games
+backToGamesBtn.addEventListener('click', function() {
+  document.getElementById('gamesContainer').style.display = 'block';
+  packagesSection.classList.remove('active');
+  
+  // Reset header
+  document.getElementById('catalogTag').textContent = 'Catalog';
+  document.getElementById('catalogTitle').textContent = 'Free Fire';
+  document.getElementById('catalogSubtitle').textContent = '';
+  
+  document.getElementById('games').scrollIntoView({ behavior: 'smooth' });
+});
 
 // ============================================================
 // PACKAGES
 // ============================================================
 let packagesCache = [];
 let currentFilter = 'all';
-const packagesGrid = document.getElementById('packagesGrid');
+let currentCategory = null;
 
 db.collection('packages').orderBy('order', 'asc').onSnapshot(snap => {
   packagesCache = [];
   snap.forEach(d => packagesCache.push({ id: d.id, ...d.data() }));
-  renderPackages(currentFilter);
-}, err => { packagesGrid.innerHTML = '<p class="empty-msg">Unable to load packages.</p>'; });
+  // Only render if packages section is active
+  if (packagesSection.classList.contains('active')) {
+    renderPackages(currentGameId);
+  }
+}, err => { 
+  console.error('Packages error:', err);
+  packagesGrid.innerHTML = '<p class="empty-msg">Unable to load packages. Please refresh.</p>'; 
+});
 
-function renderPackages(filter = 'all') {
-  currentFilter = filter;
-  const list = filter === 'all' ? packagesCache : packagesCache.filter(p => p.gameId === filter);
+function renderPackages(gameId) {
+  if (!gameId) return;
+  // Filter packages by game
+  let list = packagesCache.filter(p => p.gameId === gameId);
+  
+  // Apply category filter if set
+  if (currentCategory && currentCategory !== 'all') {
+    list = list.filter(p => p.category === currentCategory);
+  }
+  
   if (list.length === 0) {
     packagesGrid.innerHTML = '<p class="empty-msg">No packages available for this selection.</p>';
     return;
   }
   packagesGrid.innerHTML = list.map((p, i) => `
-    <div class="package-card reveal" style="transition-delay:${i * 0.05}s">
+    <div class="package-card reveal package-clickable" style="transition-delay:${i * 0.03}s" data-package-id="${p.id}">
       ${p.badge ? `<span class="badge-ribbon">${p.badge}</span>` : ''}
-      <div class="pkg-img-wrap"><img src="${p.image || 'https://via.placeholder.com/300x200?text=Package'}" alt="${p.title}" loading="lazy"></div>
-      <div class="pkg-info"><span class="pkg-game-tag">${p.gameName || ''}</span><h4>${p.title}</h4><p class="pkg-desc">${p.description || ''}</p>
-        <div class="pkg-price-row"><div>${p.oldPrice ? `<span class="old-price">৳${p.oldPrice}</span>` : ''}<span class="price">৳${p.price}</span></div><button class="btn btn-primary btn-sm buy-btn" data-id="${p.id}"><i class="fa-solid fa-cart-shopping"></i> Buy</button></div>
+      <div class="pkg-info">
+        <h4>${p.title}</h4>
+        <div class="pkg-price-row">
+          ${p.oldPrice ? `<span class="old-price">৳${p.oldPrice}</span>` : ''}
+          <span class="price">৳${p.price}</span>
+        </div>
       </div>
     </div>
   `).join('');
+  
+  // Add click event to package cards
+  document.querySelectorAll('.package-clickable').forEach(card => {
+    card.addEventListener('click', function() {
+      const pkgId = this.dataset.packageId;
+      const pkg = packagesCache.find(p => p.id === pkgId);
+      if (pkg) {
+        openOrderModal(pkg);
+      }
+    });
+  });
+  
   observeReveal();
 }
 
+// Filter packages by category
+function filterPackagesByCategory(category) {
+  currentCategory = category;
+  if (packagesSection.classList.contains('active') && currentGameId) {
+    renderPackages(currentGameId);
+  }
+}
+
 // ============================================================
-// ORDER SYSTEM (with auth guard)
+// ORDER SYSTEM
 // ============================================================
 let selectedPackage = null;
 const orderModal = document.getElementById('orderModal');
 
-packagesGrid.addEventListener('click', e => {
-  const btn = e.target.closest('.buy-btn');
-  if (!btn) return;
-  const pkg = packagesCache.find(p => p.id === btn.dataset.id);
-  if (!pkg) return;
-  // Auth guard: if not logged in, show login modal
+function openOrderModal(pkg) {
   if (!currentUser) {
     document.getElementById('loginModal').classList.add('active');
     showToast('Please login to place an order.', 'info');
@@ -766,13 +1292,11 @@ packagesGrid.addEventListener('click', e => {
   document.getElementById('modalPkgName').textContent = pkg.title;
   document.getElementById('modalPkgPrice').textContent = '৳' + pkg.price;
   document.getElementById('modalPkgImg').src = pkg.image || 'https://via.placeholder.com/100';
-  // Auto-fill with current user info
-  document.getElementById('orderName').value = currentUser.displayName || '';
-  document.getElementById('orderContact').value = currentUser.email || '';
+  document.getElementById('orderName').value = '';
   document.getElementById('orderQty').value = 1;
   document.getElementById('transactionId').value = '';
   orderModal.classList.add('active');
-});
+}
 
 orderModal.addEventListener('click', e => {
   if (e.target === orderModal) {
@@ -794,20 +1318,17 @@ document.getElementById('orderForm').addEventListener('submit', async e => {
     return;
   }
   const nameEl = document.getElementById('orderName');
-  const contactEl = document.getElementById('orderContact');
   const qtyEl = document.getElementById('orderQty');
   const transactionEl = document.getElementById('transactionId');
-  if (!nameEl || !contactEl || !qtyEl || !transactionEl) {
+  if (!nameEl || !qtyEl || !transactionEl) {
     showToast('Form error. Please refresh.', 'error');
     return;
   }
   const orderName = nameEl.value.trim();
-  const orderContact = contactEl.value.trim();
   const orderQty = Number(qtyEl.value) || 1;
   const transactionId = transactionEl.value.trim();
 
   if (!orderName) { showToast('Please enter your UID.', 'error'); nameEl.focus(); return; }
-  if (!orderContact) { showToast('Please enter your email or phone.', 'error'); contactEl.focus(); return; }
   if (!transactionId) { showToast('Please enter your TRANSACTION ID.', 'error'); transactionEl.focus(); return; }
 
   const btn = e.target.querySelector('button[type="submit"]');
@@ -825,9 +1346,9 @@ document.getElementById('orderForm').addEventListener('submit', async e => {
       price: Number(selectedPackage.price) || 0,
       quantity: orderQty,
       totalPrice: (Number(selectedPackage.price) || 0) * orderQty,
-      name: currentUser.displayName || '',  // Customer's Google name
+      name: currentUser.displayName || '',
       gameUid: orderName,
-      contact: orderContact,
+      contact: currentUser.email || '',
       transactionId: transactionId,
       status: 'pending',
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -845,6 +1366,14 @@ document.getElementById('orderForm').addEventListener('submit', async e => {
   btn.disabled = false;
   btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Place Order';
 });
+
+// ============================================================
+// INITIALIZATION CHECK
+// ============================================================
+console.log('🚀 Flex TopUp initialized successfully!');
+console.log('📊 Firebase connected:', firebase.app().name);
+console.log('👤 Auth state listener active');
+console.log('📁 Current catalog mode:', currentCatalog);
 </script>
 </body>
 </html>
