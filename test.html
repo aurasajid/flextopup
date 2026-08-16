@@ -695,7 +695,7 @@ let packageCategories = [];
 let TELEGRAM_BOT_TOKEN = '';
 let TELEGRAM_CHAT_ID = '';
 let TELEGRAM_BOT_ENABLED = false;
-let telegramCommands = []; // Structure: [{ command: 'atp', packageName: '115 Diamond', amount: '80' }]
+let telegramCommands = [];
 let telegramSuccessMessage = '';
 let telegramDoneMessage = '';
 let lastUpdateId = 0;
@@ -1022,7 +1022,7 @@ document.addEventListener('click', function(e) {
 });
 
 // ============================================================
-// TELEGRAM BOT FUNCTIONS - UPDATED with Auto Status Update
+// TELEGRAM BOT FUNCTIONS - UPDATED with Auto Status Update & Better Extraction
 // ============================================================
 
 // Format order message for Telegram
@@ -1148,30 +1148,103 @@ async function sendOrderToTelegram(orderData) {
 }
 
 // ============================================================
-// AUTO STATUS UPDATE - Extract UID from text (8-12 digits support)
+// AUTO STATUS UPDATE - Extract UID from text (Improved for bot reply format)
 // ============================================================
 function extractUidFromText(text) {
-  // Try to find UID pattern: "• ᴜɪᴅ        : 3761036809"
-  const uidPattern = /[•|·|●]\s*[uU][iI][dD]\s*[:：]\s*(\d+)/;
-  const match = text.match(uidPattern);
+  console.log('🔍 Extracting UID from:', text.substring(0, 300));
+  
+  // Pattern 1: "• ᴜɪᴅ : 2052662997" - matches the bot's exact format
+  // Using Unicode-aware regex for the special characters
+  const uidPattern1 = /[•·●]\s*[ᴜu][ɪi][ᴅd]\s*[:：]\s*(\d+)/i;
+  let match = text.match(uidPattern1);
   if (match) {
+    console.log('✅ UID found via pattern 1 (special Unicode):', match[1]);
     return match[1];
   }
   
-  // Try to find UID in the format "UID: 3761036809"
-  const uidPattern2 = /[uU][iI][dD]\s*[:：]\s*(\d+)/;
-  const match2 = text.match(uidPattern2);
-  if (match2) {
-    return match2[1];
+  // Pattern 2: "• ᴜɪᴅ        : 2052662997" with any whitespace
+  const uidPattern2 = /[•·●]\s*[uU][iI][dD]\s*[:：]\s*(\d+)/;
+  match = text.match(uidPattern2);
+  if (match) {
+    console.log('✅ UID found via pattern 2:', match[1]);
+    return match[1];
   }
   
-  // Try to find any 8-12 digit number (common UID format)
-  const uidPattern3 = /\b(\d{8,12})\b/;
-  const match3 = text.match(uidPattern3);
-  if (match3) {
-    return match3[1];
+  // Pattern 3: "ᴜɪᴅ : 2052662997" or "UID : 2052662997"
+  const uidPattern3 = /(?:[ᴜu][ɪi][ᴅd]|[uU][iI][dD])\s*[:：]\s*(\d+)/;
+  match = text.match(uidPattern3);
+  if (match) {
+    console.log('✅ UID found via pattern 3:', match[1]);
+    return match[1];
   }
   
+  // Pattern 4: "• ᴜɪᴅ    : 2052662997" - more flexible
+  const uidPattern4 = /[•·●]\s*[uUᴜ][iIɪ][dDᴅ]\s*[:：]\s*(\d+)/;
+  match = text.match(uidPattern4);
+  if (match) {
+    console.log('✅ UID found via pattern 4 (flexible):', match[1]);
+    return match[1];
+  }
+  
+  // Pattern 5: Look for "ᴜɪᴅ" or "UID" followed by colon and number
+  const uidPattern5 = /[uUᴜ][iIɪ][dDᴅ]\s*[:：]\s*(\d+)/;
+  match = text.match(uidPattern5);
+  if (match) {
+    console.log('✅ UID found via pattern 5:', match[1]);
+    return match[1];
+  }
+  
+  // Pattern 6: Any 8-12 digit number after a colon
+  const uidPattern6 = /[:：]\s*(\d{8,12})/;
+  match = text.match(uidPattern6);
+  if (match) {
+    console.log('✅ UID found via pattern 6 (after colon):', match[1]);
+    return match[1];
+  }
+  
+  // Pattern 7: Look for "UID" or "ᴜɪᴅ" anywhere and take the next number
+  const uidPattern7 = /(?:[uU]|[ᴜ][iI]|[ɪ][dD]|[ᴅ])\s*[:：]?\s*(\d{8,12})/i;
+  match = text.match(uidPattern7);
+  if (match) {
+    console.log('✅ UID found via pattern 7:', match[1]);
+    return match[1];
+  }
+  
+  // Pattern 8: Find any 8-12 digit number that appears on a line with "UID" or "ᴜɪᴅ"
+  // Split into lines and check each line
+  const lines = text.split('\n');
+  for (const line of lines) {
+    // Check if line contains UID indicator
+    if (/[uUᴜ][iIɪ][dDᴅ]/i.test(line)) {
+      const numMatch = line.match(/\b(\d{8,12})\b/);
+      if (numMatch) {
+        console.log('✅ UID found via pattern 8 (line check):', numMatch[1]);
+        return numMatch[1];
+      }
+    }
+  }
+  
+  // Pattern 9: Any 8-12 digit number (common UID format)
+  const uidPattern9 = /\b(\d{8,12})\b/g;
+  let allMatches = [];
+  let m;
+  while ((m = uidPattern9.exec(text)) !== null) {
+    allMatches.push(m[1]);
+  }
+  
+  if (allMatches.length > 0) {
+    // Prefer 9-10 digit numbers as they're most common for Free Fire UIDs
+    for (const num of allMatches) {
+      if (num.length >= 9 && num.length <= 10) {
+        console.log('✅ UID found via pattern 9 (9-10 digits):', num);
+        return num;
+      }
+    }
+    console.log('✅ UID found via pattern 9 (8-12 digits):', allMatches[0]);
+    return allMatches[0];
+  }
+  
+  console.log('❌ No UID found in message');
   return null;
 }
 
@@ -1182,13 +1255,19 @@ async function checkAutoStatusUpdate(message) {
   const text = message.text || '';
   const lowerText = text.toLowerCase();
   
+  console.log('📨 Checking auto status update for message:', text.substring(0, 200));
+  
   // Load bot config to get keywords
   const botDoc = await db.collection('config').doc('bot').get();
   const botData = botDoc.exists ? botDoc.data() : {};
   const autoStatusEnabled = botData.autoStatusEnabled || false;
   const statusKeywords = botData.statusKeywords || [];
   
+  console.log('🤖 Auto status enabled:', autoStatusEnabled);
+  console.log('📌 Keywords:', statusKeywords);
+  
   if (!autoStatusEnabled || statusKeywords.length === 0) {
+    console.log('⚠️ Auto status disabled or no keywords');
     return false;
   }
   
@@ -1197,14 +1276,17 @@ async function checkAutoStatusUpdate(message) {
   let matchedStatus = null;
   
   for (const kw of statusKeywords) {
+    // Check if the keyword exists in the message (case insensitive)
     if (lowerText.includes(kw.keyword.toLowerCase())) {
       matchedKeyword = kw.keyword;
       matchedStatus = kw.status;
+      console.log(`✅ Found keyword "${matchedKeyword}" in message`);
       break;
     }
   }
   
   if (!matchedKeyword || !matchedStatus) {
+    console.log('⚠️ No keyword matched');
     return false;
   }
   
@@ -1221,16 +1303,49 @@ async function checkAutoStatusUpdate(message) {
   
   // Find the most recent pending order for this UID
   try {
-    const ordersSnap = await db.collection('orders')
+    // First try to find by gameUid
+    let ordersSnap = await db.collection('orders')
       .where('gameUid', '==', uid)
       .where('status', '==', 'pending')
       .orderBy('createdAt', 'desc')
       .limit(1)
       .get();
     
+    // If no order found, try to find by uid (user ID)
+    if (ordersSnap.empty) {
+      console.log(`⚠️ No pending order found with gameUid: ${uid}, trying uid field`);
+      ordersSnap = await db.collection('orders')
+        .where('uid', '==', uid)
+        .where('status', '==', 'pending')
+        .orderBy('createdAt', 'desc')
+        .limit(1)
+        .get();
+    }
+    
+    // If still no order found, try to find by any order with this UID in any field
+    if (ordersSnap.empty) {
+      console.log(`⚠️ No pending order found with uid field, trying fallback`);
+      // Get all pending orders and check if any contains this UID
+      const allPending = await db.collection('orders')
+        .where('status', '==', 'pending')
+        .orderBy('createdAt', 'desc')
+        .limit(20)
+        .get();
+      
+      for (const doc of allPending.docs) {
+        const data = doc.data();
+        if (data.gameUid === uid || data.uid === uid || (data.gameUid && data.gameUid.toString() === uid)) {
+          ordersSnap = allPending;
+          break;
+        }
+      }
+    }
+    
     if (!ordersSnap.empty) {
       const orderDoc = ordersSnap.docs[0];
       const orderData = { id: orderDoc.id, ...orderDoc.data() };
+      
+      console.log(`✅ Found order #${orderData.id} for UID: ${uid}`);
       
       // Update order status
       await orderDoc.ref.update({
@@ -1249,6 +1364,7 @@ async function checkAutoStatusUpdate(message) {
       const confirmMsg = `${pkgName} topup complete in this id ${uid} status updated to ${statusText}`;
       
       await sendTelegramMessage(TELEGRAM_CHAT_ID, confirmMsg);
+      console.log(`📤 Sent confirmation: ${confirmMsg}`);
       
       return true;
     } else {
@@ -1266,9 +1382,12 @@ async function processTelegramCommand(message) {
   const text = message.text || '';
   const trimmedText = text.trim();
   
+  console.log('📨 Processing message:', trimmedText.substring(0, 200));
+  
   // FIRST: Check for auto status update (keywords like "success", "done", etc.)
   const autoUpdated = await checkAutoStatusUpdate(message);
   if (autoUpdated) {
+    console.log('✅ Auto status update completed');
     return; // Already handled by auto status update
   }
   
@@ -1278,6 +1397,8 @@ async function processTelegramCommand(message) {
   if (commandMatch) {
     const uid = commandMatch[1];
     const amount = commandMatch[2];
+    
+    console.log(`📱 Processing manual command: atp ${uid} ${amount}`);
     
     try {
       // Find the command that matches this amount
@@ -1322,7 +1443,7 @@ async function processTelegramCommand(message) {
         const completionMsg = formatTelegramCompletionMessage(orderData, uid);
         await sendTelegramMessage(TELEGRAM_CHAT_ID, completionMsg);
         
-        // Send simple confirmation: "[pkg name] topup complete in this id [uid] status updated to complete"
+        // Send simple confirmation
         const pkgName = orderData.packageTitle || 'Package';
         const confirmMsg = `${pkgName} topup complete in this id ${uid} status updated to Completed`;
         await sendTelegramMessage(TELEGRAM_CHAT_ID, confirmMsg);
