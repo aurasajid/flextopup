@@ -98,7 +98,7 @@ img{max-width:100%;}
 .btn-add{width:auto; padding:11px 22px;}
 
 .table-wrap{overflow-x:auto;}
-table{width:100%; border-collapse:collapse; min-width:600px;}
+table{width:100%; border-collapse:collapse; min-width:700px;}
 th, td{text-align:left; padding:14px 12px; border-bottom:1px solid var(--border); font-size:.9rem;}
 th{color:var(--text2); text-transform:uppercase; font-size:.75rem; letter-spacing:.5px;}
 tr:hover{background:var(--bg2);}
@@ -466,10 +466,20 @@ select.status-select{padding:6px 10px; border-radius:8px; border:1px solid var(-
         </div>
       </section>
 
+      <!-- UPDATED ORDERS SECTION -->
       <section class="panel" id="panel-orders">
         <div class="card-box">
           <div class="section-toolbar"><h3><i class="fa-solid fa-receipt"></i> Customer Orders</h3></div>
-          <div class="table-wrap"><table><thead><tr><th>Customer</th><th>Contact</th><th>Package</th><th>Qty</th><th>Price</th><th>Status</th><th>Date</th><th>Del</th></tr></thead><tbody id="ordersTableBody"><tr class="empty-row"><td colspan="8">No orders yet</td></tr></tbody></table></div>
+          <div class="table-wrap"><table><thead><tr>
+            <th>UID</th>
+            <th>Contact</th>
+            <th>Package</th>
+            <th>Price</th>
+            <th>Transaction ID</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Del</th>
+          </tr></thead><tbody id="ordersTableBody"><tr class="empty-row"><td colspan="8">No orders yet</td></tr></tbody></table></div>
         </div>
       </section>
 
@@ -952,7 +962,7 @@ document.getElementById('packageForm').addEventListener('submit', async e=>{
   }catch(err){ showToast('Failed to save package.', 'error'); console.error(err); }
 });
 
-/* ---------- ORDERS ---------- */
+/* ---------- ORDERS - UPDATED ---------- */
 let ordersCache = [];
 function initOrders(){
   db.collection('orders').orderBy('createdAt','desc').onSnapshot(snap=>{
@@ -965,15 +975,21 @@ function initOrders(){
     renderCustomersTable();
   }, err=> console.error(err));
 }
+
 function renderOrdersTable(orders){
   const body = document.getElementById('ordersTableBody');
   if(orders.length===0){ body.innerHTML = '<tr class="empty-row"><td colspan="8">No orders yet</td></tr>'; return; }
   body.innerHTML = orders.map(o=>{
     const date = o.createdAt && o.createdAt.toDate ? o.createdAt.toDate().toLocaleString() : '-';
+    // Format package with quantity: "1X MONTHLY", "2X MONTHLY", etc.
+    const qty = o.quantity || 1;
+    const packageDisplay = `${qty}X ${o.packageTitle || 'Package'}`;
     return `<tr>
-      <td>${o.name||'-'}</td><td>${o.contact||'-'}</td>
-      <td>${o.packageTitle||'-'}<br><small style="color:var(--text2);">${o.gameName||''}</small></td>
-      <td>${o.quantity||1}</td><td>$${o.price||0}</td>
+      <td><strong>${o.gameUid || o.uid || '-'}</strong></td>
+      <td>${o.contact || '-'}</td>
+      <td><strong>${packageDisplay}</strong><br><small style="color:var(--text2);">${o.gameName || ''}</small></td>
+      <td>$${o.price || 0}</td>
+      <td><code style="background:var(--bg2);padding:2px 8px;border-radius:4px;font-size:.75rem;">${o.transactionId || '-'}</code></td>
       <td><select class="status-select" onchange="updateOrderStatus('${o.id}', this.value)">
         ${['pending','processing','completed','cancelled'].map(s=> `<option value="${s}" ${o.status===s?'selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`).join('')}
       </select></td>
@@ -982,6 +998,7 @@ function renderOrdersTable(orders){
     </tr>`;
   }).join('');
 }
+
 async function updateOrderStatus(id, status){
   try{ await db.collection('orders').doc(id).update({status}); showToast('Order status updated.', 'success'); }
   catch(err){ showToast('Failed to update status.', 'error'); }
@@ -1044,7 +1061,6 @@ function initBotSettings() {
     document.getElementById('telegramSuccessMessage').value = d.telegramSuccessMessage || '✅ Sᴜᴄᴄᴇss';
     document.getElementById('telegramDoneMessage').value = d.telegramDoneMessage || '💎 Dɪᴀᴍᴏɴᴅ Tᴏᴘ-Uᴘ Dᴏɴᴇ ! !';
     
-    // Load commands - each has: { command: 'atp', packageName: '115 Diamond', amount: '80' }
     commandData = d.telegramCommands || [];
     renderCommandList();
     
