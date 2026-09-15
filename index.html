@@ -474,6 +474,78 @@
         font-size:1rem;
       }
     }
+
+    /* ===== NEW STYLES FOR PLAYER NAME FETCH ===== */
+    .uid-fetch-row {
+      display: flex;
+      gap: 8px;
+      align-items: stretch;
+    }
+    .uid-fetch-row input {
+      flex: 1;
+      min-width: 0;
+    }
+    .btn-fetch-name {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 0 16px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      font-family: var(--font-family);
+      font-size: .8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .btn-fetch-name:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: translateY(-1px);
+    }
+    .btn-fetch-name:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .player-name-result {
+      margin-top: 8px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      font-family: var(--font-family);
+      font-size: .85rem;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .player-name-result.show {
+      display: flex;
+    }
+    .player-name-result .pname-label {
+      color: var(--text2);
+      font-size: .75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    .player-name-result .pname-value {
+      font-weight: 700;
+      color: var(--secondary);
+      word-break: break-word;
+    }
+    .player-name-result .pname-meta {
+      color: var(--text2);
+      font-size: .72rem;
+      margin-left: auto;
+    }
   </style>
 </head>
 <body>
@@ -603,7 +675,17 @@
     <form id="orderForm">
       <div class="form-group">
         <label for="orderName">Your UID</label>
-        <input type="text" id="orderName" placeholder="Enter your game UID" required>
+        <div class="uid-fetch-row">
+          <input type="text" id="orderName" placeholder="Enter your game UID" required>
+          <button type="button" class="btn-fetch-name" id="fetchPlayerNameBtn">
+            <i class="fa-solid fa-magnifying-glass"></i> Player Name
+          </button>
+        </div>
+        <div class="player-name-result" id="playerNameResult">
+          <span class="pname-label">Name:</span>
+          <span class="pname-value" id="playerNameValue">—</span>
+          <span class="pname-meta" id="playerNameMeta"></span>
+        </div>
       </div>
       <div class="form-group">
         <label for="orderQty">Quantity</label>
@@ -1154,7 +1236,6 @@ function extractUidFromText(text) {
   console.log('🔍 Extracting UID from:', text.substring(0, 300));
   
   // Pattern 1: "• ᴜɪᴅ : 2052662997" - matches the bot's exact format
-  // Using Unicode-aware regex for the special characters
   const uidPattern1 = /[•·●]\s*[ᴜu][ɪi][ᴅd]\s*[:：]\s*(\d+)/i;
   let match = text.match(uidPattern1);
   if (match) {
@@ -1211,10 +1292,8 @@ function extractUidFromText(text) {
   }
   
   // Pattern 8: Find any 8-12 digit number that appears on a line with "UID" or "ᴜɪᴅ"
-  // Split into lines and check each line
   const lines = text.split('\n');
   for (const line of lines) {
-    // Check if line contains UID indicator
     if (/[uUᴜ][iIɪ][dDᴅ]/i.test(line)) {
       const numMatch = line.match(/\b(\d{8,12})\b/);
       if (numMatch) {
@@ -1233,7 +1312,6 @@ function extractUidFromText(text) {
   }
   
   if (allMatches.length > 0) {
-    // Prefer 9-10 digit numbers as they're most common for Free Fire UIDs
     for (const num of allMatches) {
       if (num.length >= 9 && num.length <= 10) {
         console.log('✅ UID found via pattern 9 (9-10 digits):', num);
@@ -1257,7 +1335,6 @@ async function checkAutoStatusUpdate(message) {
   
   console.log('📨 Checking auto status update for message:', text.substring(0, 200));
   
-  // Load bot config to get keywords
   const botDoc = await db.collection('config').doc('bot').get();
   const botData = botDoc.exists ? botDoc.data() : {};
   const autoStatusEnabled = botData.autoStatusEnabled || false;
@@ -1271,12 +1348,10 @@ async function checkAutoStatusUpdate(message) {
     return false;
   }
   
-  // Check if any keyword matches
   let matchedKeyword = null;
   let matchedStatus = null;
   
   for (const kw of statusKeywords) {
-    // Check if the keyword exists in the message (case insensitive)
     if (lowerText.includes(kw.keyword.toLowerCase())) {
       matchedKeyword = kw.keyword;
       matchedStatus = kw.status;
@@ -1292,7 +1367,6 @@ async function checkAutoStatusUpdate(message) {
   
   console.log(`🔍 Found keyword "${matchedKeyword}" in message, status: ${matchedStatus}`);
   
-  // Extract UID from the message
   const uid = extractUidFromText(text);
   if (!uid) {
     console.log('⚠️ No UID found in message, skipping auto status update');
@@ -1301,9 +1375,7 @@ async function checkAutoStatusUpdate(message) {
   
   console.log(`📱 Found UID: ${uid}`);
   
-  // Find the most recent pending order for this UID
   try {
-    // First try to find by gameUid
     let ordersSnap = await db.collection('orders')
       .where('gameUid', '==', uid)
       .where('status', '==', 'pending')
@@ -1311,7 +1383,6 @@ async function checkAutoStatusUpdate(message) {
       .limit(1)
       .get();
     
-    // If no order found, try to find by uid (user ID)
     if (ordersSnap.empty) {
       console.log(`⚠️ No pending order found with gameUid: ${uid}, trying uid field`);
       ordersSnap = await db.collection('orders')
@@ -1322,10 +1393,8 @@ async function checkAutoStatusUpdate(message) {
         .get();
     }
     
-    // If still no order found, try to find by any order with this UID in any field
     if (ordersSnap.empty) {
       console.log(`⚠️ No pending order found with uid field, trying fallback`);
-      // Get all pending orders and check if any contains this UID
       const allPending = await db.collection('orders')
         .where('status', '==', 'pending')
         .orderBy('createdAt', 'desc')
@@ -1347,7 +1416,6 @@ async function checkAutoStatusUpdate(message) {
       
       console.log(`✅ Found order #${orderData.id} for UID: ${uid}`);
       
-      // Update order status
       await orderDoc.ref.update({
         status: matchedStatus,
         completedAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -1358,7 +1426,6 @@ async function checkAutoStatusUpdate(message) {
       console.log(`✅ Order #${orderData.id} auto-updated to "${matchedStatus}" via keyword "${matchedKeyword}"`);
       showToast(`✅ Order #${orderData.id} updated to ${matchedStatus}!`, 'success');
       
-      // Send confirmation message: "[pkg name] topup complete in this id [uid] status updated to complete"
       const pkgName = orderData.packageTitle || 'Package';
       const statusText = matchedStatus.charAt(0).toUpperCase() + matchedStatus.slice(1);
       const confirmMsg = `${pkgName} topup complete in this id ${uid} status updated to ${statusText}`;
@@ -1384,14 +1451,12 @@ async function processTelegramCommand(message) {
   
   console.log('📨 Processing message:', trimmedText.substring(0, 200));
   
-  // FIRST: Check for auto status update (keywords like "success", "done", etc.)
   const autoUpdated = await checkAutoStatusUpdate(message);
   if (autoUpdated) {
     console.log('✅ Auto status update completed');
-    return; // Already handled by auto status update
+    return;
   }
   
-  // Match format: "atp UID AMOUNT" (e.g., "atp 3761036809 80")
   const commandMatch = trimmedText.match(/^atp\s+(\d+)\s+(\d+)$/i);
   
   if (commandMatch) {
@@ -1401,7 +1466,6 @@ async function processTelegramCommand(message) {
     console.log(`📱 Processing manual command: atp ${uid} ${amount}`);
     
     try {
-      // Find the command that matches this amount
       let matchedCommand = null;
       for (const cmd of telegramCommands) {
         if (cmd.amount === amount) {
@@ -1417,7 +1481,6 @@ async function processTelegramCommand(message) {
         return;
       }
       
-      // Find the most recent pending order for this package
       const ordersSnap = await db.collection('orders')
         .where('packageTitle', '==', matchedCommand.packageName)
         .where('status', '==', 'pending')
@@ -1429,7 +1492,6 @@ async function processTelegramCommand(message) {
         const orderDoc = ordersSnap.docs[0];
         const orderData = { id: orderDoc.id, ...orderDoc.data() };
         
-        // Update order status to completed
         await orderDoc.ref.update({
           status: 'completed',
           processedUid: uid,
@@ -1439,11 +1501,9 @@ async function processTelegramCommand(message) {
           telegramCommand: trimmedText
         });
         
-        // Send completion message
         const completionMsg = formatTelegramCompletionMessage(orderData, uid);
         await sendTelegramMessage(TELEGRAM_CHAT_ID, completionMsg);
         
-        // Send simple confirmation
         const pkgName = orderData.packageTitle || 'Package';
         const confirmMsg = `${pkgName} topup complete in this id ${uid} status updated to Completed`;
         await sendTelegramMessage(TELEGRAM_CHAT_ID, confirmMsg);
@@ -1603,7 +1663,6 @@ db.collection('config').doc('bot').onSnapshot(doc => {
   
   console.log('📌 Loaded Telegram Commands from BOT config:', telegramCommands);
   
-  // Start polling if enabled
   if (TELEGRAM_BOT_ENABLED && TELEGRAM_BOT_TOKEN) {
     pollTelegramUpdates();
     if (!window._telegramPolling) {
@@ -1802,6 +1861,13 @@ function openOrderModal(pkg) {
   document.getElementById('orderName').value = '';
   document.getElementById('orderQty').value = 1;
   document.getElementById('transactionId').value = '';
+  // Reset player name result
+  const pnResult = document.getElementById('playerNameResult');
+  if (pnResult) { pnResult.classList.remove('show'); }
+  const pnValue = document.getElementById('playerNameValue');
+  if (pnValue) { pnValue.textContent = '—'; }
+  const pnMeta = document.getElementById('playerNameMeta');
+  if (pnMeta) { pnMeta.textContent = ''; }
   orderModal.classList.add('active');
 }
 
@@ -1812,6 +1878,65 @@ orderModal.addEventListener('click', e => {
   }
 });
 
+// ============================================================
+// NEW: FETCH PLAYER NAME FROM UID
+// ============================================================
+document.getElementById('fetchPlayerNameBtn').addEventListener('click', async function() {
+  const uidInput = document.getElementById('orderName');
+  const uid = uidInput.value.trim();
+  const resultDiv = document.getElementById('playerNameResult');
+  const nameSpan = document.getElementById('playerNameValue');
+  const metaSpan = document.getElementById('playerNameMeta');
+  const btn = this;
+
+  if (!uid) {
+    showToast('Please enter a UID first.', 'error');
+    uidInput.focus();
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Loading...';
+  resultDiv.classList.remove('show');
+
+  try {
+    const res = await fetch(`https://ffnamecheck.vercel.app/info?uid=${encodeURIComponent(uid)}`);
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}`);
+    }
+    const data = await res.json();
+
+    if (!data || !data.nickname) {
+      throw new Error('Player not found');
+    }
+
+    // Display the name with proper Unicode handling
+    nameSpan.textContent = data.nickname;
+    if (data.AccountLevel || data.region) {
+      const parts = [];
+      if (data.AccountLevel) parts.push(`Lv.${data.AccountLevel}`);
+      if (data.region) parts.push(data.region);
+      metaSpan.textContent = parts.join(' • ');
+    } else {
+      metaSpan.textContent = '';
+    }
+    resultDiv.classList.add('show');
+    showToast('✅ Player name fetched!', 'success');
+  } catch (err) {
+    console.error('Player name fetch error:', err);
+    nameSpan.textContent = '❌ Not found';
+    metaSpan.textContent = '';
+    resultDiv.classList.add('show');
+    showToast('Could not fetch player name. Check the UID.', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i> Player Name';
+  }
+});
+
+// ============================================================
+// ORDER SUBMIT
+// ============================================================
 document.getElementById('orderForm').addEventListener('submit', async e => {
   e.preventDefault();
   if (!currentUser) {
